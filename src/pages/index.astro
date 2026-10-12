@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const work = await getCollection('work');
+---
+<Base title="Ujwal · BA × Design Engineer" description="Business Analyst and Design Engineer generalist. I turn manual processes into systems teams can run — see Horizon secondary-market platform." current="home">
+  <div class="page">
+    <div class="hero">
+      <div class="eyebrow">Business Analyst · Design Engineer · Generalist</div>
+      <h1>I sit between business and engineering, and ship the system in between.</h1>
+      <p class="lede">I was BA / Product Owner on Horizon — a secondary-market investment platform that took ~1,000 investors from phone calls and spreadsheets to one pipeline: Submitted → Approved → Subscribed → Allocated. I owned requirements, scope and trade-offs; the team built it to last.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/work/horizon">Read Horizon case study</a>
+        <a class="btn" href="/about">About + skills</a>
+      </div>
+    </div>
+
+    <div class="eyebrow">Selected work</div>
+    <div class="work-grid">
+      <a class="work-card" href="/work/horizon">
+        <div class="meta">Oct 2025 – Oct 2026 · BA / Product Owner</div>
+        <h3>Secondary Market Investments · Horizon</h3>
+        <p>Phone + spreadsheets to one pipeline for 6 staff roles and 3 investor tiers. ~1,000 investors migrated.</p>
+        <div class="meta">BA · Scrum · KYC · e-signature · RBAC</div>
+      </a>
+      {work.map((w) => (
+        <a class="work-card" href={`/work/${w.slug}`}>
+          <div class="meta">{w.data.date ?? ''} · {w.data.role ?? ''}</div>
+          <h3>{w.data.title}</h3>
+          <p>{w.data.summary}</p>
+          <div class="meta">{(w.data.tags ?? []).join(' · ')}</div>
+        </a>
+      ))}
+      <div class="work-card soon">
+        <div class="meta">Next</div>
+        <h3>Case study #2 — slot reserved</h3>
+        <p>Add a file in src/content/work/*.mdx and it appears here. No layout rework.</p>
+      </div>
+      <div class="work-card soon">
+        <div class="meta">Later</div>
+        <h3>Notes / playground — slot reserved</h3>
+        <p>Broad now, deep later: experiments, prototypes, writing.</p>
+      </div>
+    </div>
+
+    <div class="split">
+      <div>
+        <div class="eyebrow">How I work</div>
+        <p>Same mental model as the business. Role clarity over feature richness. Status as the communication layer. Scrum, two-week sprints, Jira, formal change requests.</p>
+        <p><a href="/about">More on About →</a></p>
+      </div>
+      <div>
+        <div class="eyebrow">Results at a glance — Horizon</div>
+        <p>~1,000 investors migrated · 12 months kickoff to go-live · 3 change requests · signing 10s+ → 0.8s · cost ~$1,500 → &lt;$800/mo.</p>
+        <p><a href="/work/horizon">Full story →</a></p>
+      </div>
+    </div>
+  </div>
+</Base>

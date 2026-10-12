@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  current?: 'home' | 'work' | 'about';
+}
+const { title, description = 'Business Analyst x Design Engineer — portfolio bridging business and engineering.', current } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237a3fd0'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif'>U</text></svg>" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-nav">
+    <div class="in">
+      <a class="brand" href="/">Ujwal <small>· BA × Design Eng</small></a>
+      <nav aria-label="Primary">
+        <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
+        <a href="/work/horizon" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
+        <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <slot />
+  </main>
+  <div class="page">
+    <footer class="site-footer" id="contact">
+      <div class="eyebrow">Contact</div>
+      <p>
+        Business Analyst / Product Owner who prototypes and ships.
+        Email <a href="mailto:hello@example.com">hello@example.com</a> — replace with your address.
+        LinkedIn / GitHub links go here.
+      </p>
+      <p style="font-size:12px">Horizon is an alias. Client, vendor and product names withheld by agreement.</p>
+    </footer>
+  </div>
+</body>
+</html>
