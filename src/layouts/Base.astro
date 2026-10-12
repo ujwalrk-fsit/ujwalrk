@@ -4,7 +4,7 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  current?: 'home' | 'work' | 'about';
+  current?: 'home' | 'work' | 'about' | 'play' | 'notes';
 }
 const { title, description = 'Business Analyst x Design Engineer — portfolio bridging business and engineering.', current } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname;
@@ -31,9 +31,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString(
     <div class="in">
       <a class="brand" href="/">Ujwal <small>· BA × Design Eng</small></a>
       <nav aria-label="Primary">
-        <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
-        <a href="/work/horizon" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
+        <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Work</a>
         <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+        <a href="/play" aria-current={current === 'play' ? 'page' : undefined}>Play</a>
+        <a href="/notes" aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
+        <a href="/resume.pdf">Resume</a>
       </nav>
     </div>
   </header>
@@ -45,10 +47,12 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString(
       <div class="eyebrow">Contact</div>
       <p>
         Business Analyst / Product Owner who prototypes and ships.
-        Email <a href="mailto:hello@example.com">hello@example.com</a> — replace with your address.
-        LinkedIn / GitHub links go here.
+        Email <a href="mailto:ukarajgikar@gmail.com">ukarajgikar@gmail.com</a> ·
+        <a href="https://www.linkedin.com/in/ujwal-karajgikar">LinkedIn</a> ·
+        <a href="https://github.com/ujwalrk-fsit/ujwalrk">GitHub</a> ·
+        <a href="/resume.pdf">Resume</a>
       </p>
-      <p style="font-size:12px">Horizon is an alias. Client, vendor and product names withheld by agreement.</p>
+      <p style="font-size:12px">Horizon and Adapter are aliases. Client, vendor and product names withheld by agreement.</p>
     </footer>
   </div>
 </body>

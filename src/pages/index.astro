@@ -1,59 +1,59 @@
 ---
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
-const work = await getCollection('work');
 ---
-<Base title="Ujwal · BA × Design Engineer" description="Business Analyst and Design Engineer generalist. I turn manual processes into systems teams can run — see Horizon secondary-market platform." current="home">
-  <div class="page">
-    <div class="hero">
-      <div class="eyebrow">Business Analyst · Design Engineer · Generalist</div>
-      <h1>I sit between business and engineering, and ship the system in between.</h1>
-      <p class="lede">I was BA / Product Owner on Horizon — a secondary-market investment platform that took ~1,000 investors from phone calls and spreadsheets to one pipeline: Submitted → Approved → Subscribed → Allocated. I owned requirements, scope and trade-offs; the team built it to last.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="/work/horizon">Read Horizon case study</a>
-        <a class="btn" href="/about">About + skills</a>
-      </div>
+<Base title="Ujwal Ramesh Karajgikar · Business Analyst + Design Engineer" description="Business Analyst who Design Engineers: requirements, product ownership, delivery governance, design engineering. Horizon and Adapter case studies." current="home">
+  <div class="page hm">
+    <h1>A Business Analyst who Design Engineers</h1>
+    <p>Reliable, innovative, and dynamic individual with experience in business analytics, AI assisted development, data analytics and user experience. Skilled in Python, AWS, and modern development tools, with a focus on DevOps concepts and leading teams. Quick to learn new technologies and committed to consistent professional growth.</p>
+    <p>Currently working as a Business Analyst, supporting stakeholder needs through requirement analysis, process optimization, and data-driven insights while continuing to build technical depth.</p>
+
+    <h2 class="hs">What I do</h2>
+    <div class="g2">
+      <div class="c"><h3>Requirements and discovery</h3><p>Turning stakeholder conversations, specifications and edge cases into scenarios the whole team agrees on before anything is built.</p></div>
+      <div class="c"><h3>Product ownership</h3><p>Scoping phases, managing change requests and deciding what each release needs, from the first sprint to phase 2.</p></div>
+      <div class="c"><h3>Delivery governance</h3><p>Running Jira, workflows and quality tracking so status is visible to the client and to the team.</p></div>
+      <div class="c"><h3>Design engineering</h3><p>Wireframing, prototyping and building small apps myself, so conversations with designers and developers stay concrete.</p></div>
     </div>
 
-    <div class="eyebrow">Selected work</div>
-    <div class="work-grid">
-      <a class="work-card" href="/work/horizon">
-        <div class="meta">Oct 2025 – Oct 2026 · BA / Product Owner</div>
-        <h3>Secondary Market Investments · Horizon</h3>
-        <p>Phone + spreadsheets to one pipeline for 6 staff roles and 3 investor tiers. ~1,000 investors migrated.</p>
-        <div class="meta">BA · Scrum · KYC · e-signature · RBAC</div>
+    <h2 class="hs">Selected impact</h2>
+    <div class="stats">
+      <div><b>~1,000</b><span>investors migrated</span></div>
+      <div><b>12 months</b><span>kickoff to go-live</span></div>
+      <div><b>3</b><span>change requests delivered</span></div>
+      <div><b>10s+ → 0.8s</b><span>signing screen load</span></div>
+      <div><b>5</b><span>network phases in the plan</span></div>
+    </div>
+
+    <h2 class="hs">Case studies</h2>
+    <div class="nx">
+      <a href="/work/horizon">
+        <i><img src="/images/horizon-cover.png" alt="Horizon case study cover" loading="lazy" /></i>
+        <h3>Horizon <small>14 OCTOBER 2025</small></h3>
+        <p>Manage the full lifecycle of a fund investment including investor onboarding, capital raising &amp; keeping investors informed through content and reports.</p>
+        <div class="chips"><span>Business Analyst / Product Owner</span><span>12 months</span><span>Live</span></div>
       </a>
-      {work.map((w) => (
-        <a class="work-card" href={`/work/${w.slug}`}>
-          <div class="meta">{w.data.date ?? ''} · {w.data.role ?? ''}</div>
-          <h3>{w.data.title}</h3>
-          <p>{w.data.summary}</p>
-          <div class="meta">{(w.data.tags ?? []).join(' · ')}</div>
-        </a>
-      ))}
-      <div class="work-card soon">
-        <div class="meta">Next</div>
-        <h3>Case study #2 — slot reserved</h3>
-        <p>Add a file in src/content/work/*.mdx and it appears here. No layout rework.</p>
-      </div>
-      <div class="work-card soon">
-        <div class="meta">Later</div>
-        <h3>Notes / playground — slot reserved</h3>
-        <p>Broad now, deep later: experiments, prototypes, writing.</p>
-      </div>
+      <a href="/work/adapter">
+        <i class="o"><img src="/images/adapter-cover.png" alt="Adapter case study cover" loading="lazy" /></i>
+        <h3>Adapter <small>10 APRIL 2026</small></h3>
+        <p>Leverages USSD menus to connect a core technology infrastructure to a mobile money wallet, for seamless user onboarding and secure transactions.</p>
+        <div class="chips"><span>Business Analyst / Product Owner</span><span>Phased delivery</span><span>In UAT</span></div>
+      </a>
+    </div>
+    <p style="font-style:italic;font-size:12px;margin-top:14px">Client, vendor and product names are withheld by agreement.</p>
+
+    <h2 class="hs">What clients say</h2>
+    <blockquote>“This is exactly what we talked about wanting—all those little things here and there where you think, ‘I wish they had this, I wish they had that.’”<span>Client leadership, Horizon</span></blockquote>
+
+    <h2 class="hs">More</h2>
+    <div class="g3">
+      <div class="c"><h3>About</h3><p>Story, how I work, and experience — the canonical home for my background.</p><p><a href="/about">About →</a></p></div>
+      <div class="c"><h3>Play</h3><p>Side projects and experiments, including a wallet-remittance flow gallery.</p><p><a href="/play">Play →</a></p></div>
+      <div class="c"><h3>Notes</h3><p>Outdoors, learning, community, co-curriculars and certificates.</p><p><a href="/notes">Notes →</a></p></div>
     </div>
 
-    <div class="split">
-      <div>
-        <div class="eyebrow">How I work</div>
-        <p>Same mental model as the business. Role clarity over feature richness. Status as the communication layer. Scrum, two-week sprints, Jira, formal change requests.</p>
-        <p><a href="/about">More on About →</a></p>
-      </div>
-      <div>
-        <div class="eyebrow">Results at a glance — Horizon</div>
-        <p>~1,000 investors migrated · 12 months kickoff to go-live · 3 change requests · signing 10s+ → 0.8s · cost ~$1,500 → &lt;$800/mo.</p>
-        <p><a href="/work/horizon">Full story →</a></p>
-      </div>
+    <div class="co">
+      <div><h3>Want to talk about a project?</h3><p>I’m happy to walk through either case study, including the parts that don’t fit on a page.</p></div>
+      <div class="ba2"><a class="bt" href="mailto:ukarajgikar@gmail.com">Get in touch</a><a class="bt o" href="/resume.pdf">View resume</a></div>
     </div>
   </div>
 </Base>

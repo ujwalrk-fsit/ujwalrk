@@ -1,0 +1,82 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Mobile Money & Instant Payments Middleware · Adapter" description="Adapter middleware: USSD menus to wallet APIs to national instant-payment network. In UAT, phased delivery." current="work">
+  <div class="cur" id="cur"></div>
+  <div class="wrap">
+    <aside class="cs-aside" id="outline" tabindex="-1" aria-label="Contents">
+      <a href="#a-context">Context</a>
+      <a href="#a-built">What We Built</a><a class="n" href="#a-arch" data-p="a-built">Architecture</a><a class="n" href="#a-caps" data-p="a-built">Capabilities</a>
+      <a href="#a-decisions">Key Decisions</a><a class="n" href="#a-d1" data-p="a-decisions">Canonical model</a><a class="n" href="#a-d2" data-p="a-decisions">Configuration</a><a class="n" href="#a-d3" data-p="a-decisions">Clarity first</a>
+      <a href="#a-delivery">Delivery Story</a><a href="#a-quality">Quality &amp; Resilience</a><a href="#a-outcomes">Outcomes</a><a href="#a-learned">What I learned</a><a href="#a-next">What’s Next</a>
+    </aside>
+    <main>
+      <div class="top"><div><div class="eb">April 2026</div><h1>Mobile Money &amp; Instant Payments Middleware</h1></div></div>
+      <div class="meta4"><div><h4>Status</h4>In UAT<br />1,155 hours logged</div><div><h4>Timeline</h4>Kick-off 10 April 2026<br />Phased delivery</div><div><h4>Team</h4>1 Scrum Master<br />1 DevOps Engineer<br />2 Developers<br />1 Business Analyst / Product Owner (me)</div><div><h4>Stack</h4>React, Node.js, MongoDB</div></div>
+      <div class="fg"><span class="lb">Where it stands</span><div class="stats"><div><b>In UAT</b><span>current status</span></div><div><b>1,155</b><span>hours logged</span></div><div><b>5</b><span>delivery phases planned</span></div><div><b>3</b><span>message formats unified</span></div><div><b>30</b><span>XSD schemas managed</span></div></div><p class="cap">Headline figures for a build that is still in UAT.</p></div>
+
+      <section id="a-context"><div class="eb">Context</div><h2>A wallet and a payment network that spoke different languages.</h2>
+      <p>A mobile money provider needed its customers to register and transact on a national instant-payment network from a basic USSD menu. Registration was fragmented, onboarding was slow, and the network’s interfaces used formats the wallet’s own APIs didn’t speak.</p>
+      <p>Adapter is the middleware in between. It connects USSD menus and the wallet’s APIs to the network, handles onboarding and account changes, and keeps every message validated, signed and logged. I was Business Analyst and Product Owner: defining what it had to do, in what order, and for which scenarios.</p>
+      <div class="g3"><div class="c"><h3>Fragmented registration</h3><p>Several registration paths limited flexibility and slowed adoption.</p></div><div class="c"><h3>Many scenarios</h3><p>Registration, bulk onboarding, account administration and recovery all had to work.</p></div><div class="c"><h3>Dependencies outside our control</h3><p>Interface specifications, credentials and test environments came from external providers.</p></div></div></section>
+
+      <section id="a-built"><div class="eb">What We Built</div><h2>One integration layer between channels and the network.</h2>
+      <p>Customers dial a USSD menu. Adapter turns each step into the messages the wallet and the network expect, then returns the response as a menu or an SMS.</p>
+      <div class="sub" id="a-arch"><div class="eb">Architecture</div><div class="fg"><span class="lb">Architecture layers</span><div class="ly"><div><b>Channels</b><span>USSD menus and SMS notifications</span></div><div><b>Adapters</b><span>SOAP, ISO 20022 XML and JSON</span></div><div><b>Canonical model</b><span>One shared transaction object</span></div><div><b>Mapping</b><span>Converts between formats and field names</span></div><div><b>Flow engine</b><span>Runs each journey step by step</span></div><div><b>Routing</b><span>Chooses the destination by rule</span></div></div><p class="cap">The layers a request passes through, from channel to external system.</p></div></div>
+      <div class="sub" id="a-caps"><div class="eb">Capabilities</div><div class="g3"><div class="c"><h3>Unified onboarding</h3><p>Customers register through the USSD menu or in bulk from the back office, in one configurable flow.</p></div><div class="c"><h3>Account lifecycle</h3><p>Activation, recovery, deactivation, blocking and default-account changes, with token-based strong authentication where the network requires it.</p></div><div class="c"><h3>Configurable USSD and SMS</h3><p>Menus and message templates are built in the back office and use variables from the transaction.</p></div><div class="c"><h3>Schema-driven APIs</h3><p>Upload a contract or schema and its fields are extracted automatically for mapping.</p></div><div class="c"><h3>Flow orchestration</h3><p>Each journey runs as steps: menu, API request, callback, condition, SMS.</p></div><div class="c"><h3>Reconciliation and logs</h3><p>Every message is logged against its transaction for tracing and reconciliation.</p></div></div></div></section>
+
+      <section id="a-decisions"><div class="eb">Key Decisions</div><h2>Three decisions that shaped the product.</h2>
+      <div class="sub" id="a-d1"><div class="eb">Decision 01 · Canonical model</div><h2>Every channel speaks through one shared transaction model.</h2>
+      <p>USSD, SOAP, ISO 20022 and JSON each describe the same payment differently. We translate everything into one canonical transaction, so a field captured in a menu is the same field the network message uses. New channels and APIs only map to the model, never to each other.</p>
+      <div class="fg"><span class="lb">One model, many formats</span><div class="fl"><div><b>Wallet APIs</b><small>SOAP</small></div><span>→</span><div><b>Canonical transaction</b><small>shared fields</small></div><span>→</span><div class="p"><b>Network messages</b><small>ISO 20022 XML</small></div></div><div class="chips"><span>Format conversion</span><span>Masking</span><span>Encryption</span><span>Date conversion</span></div><p class="cap">Mapping to and from the canonical model, and what each mapping can do.</p></div></div>
+      <div class="sub" id="a-d2"><div class="eb">Decision 02 · Configuration</div><h2>Business changes should not need a release.</h2>
+      <p>Menus, SMS templates, API definitions, field mappings, flows and routing rules are configuration, not code. The trade-off is more design up front for the configuration model.</p>
+      <div class="fg"><span class="lb">What is configurable</span><div class="chips"><span>USSD menus</span><span>SMS templates</span><span>API schemas</span><span>Field mappings</span><span>Flows</span><span>Routing rules</span></div><p class="cap">Everything the business can change without a deployment.</p></div></div>
+      <div class="sub" id="a-d3"><div class="eb">Decision 03 · Clarity first</div><h2>Get the scenarios clear before building them.</h2>
+      <p>Adapter is backend-heavy, so the edge cases are the product: every scenario a specification leaves open becomes a decision in code. Requirements from the client sometimes arrived slowly, with gaps and miscommunication. I worked with both sides to close them, turning open questions into agreed scenarios before we built, because rework in a payments backend is costly. Clarity took time, and we chose it over rework.</p>
+      <div class="fg"><span class="lb">From open question to agreed behaviour</span><div class="fl"><div><b>Specification</b><small>as received</small></div><span>→</span><div><b>Gaps raised</b><small>scenarios, edge cases</small></div><span>→</span><div><b>Clarified</b><small>with the client</small></div><span>→</span><div><b>Agreed</b><small>with the team</small></div><span>→</span><div class="p"><b>Built once</b><small></small></div></div><p class="cap">How an open question became agreed behaviour before any code was written.</p></div></div></section>
+
+      <section id="a-delivery"><div class="eb">Delivery Story</div><h2>A five-phase plan, and a dependency on others’ specifications.</h2>
+      <p>The network’s implementation plan sets the order: foundation first, then payments, then everything built on top.</p>
+      <div class="fg"><span class="lb">Implementation phases</span><div class="fl"><div><b>1 · Foundation</b><small>secure connection, account data</small></div><span>→</span><div><b>2 · Instant payments</b><small>transfers, confirmations, timeouts</small></div><span>→</span><div><b>3 · Reversals</b><small>returns, disputes</small></div><span>→</span><div><b>4 · Mobile payments</b><small>QR, requests, merchants</small></div><span>→</span><div class="p"><b>5 · State payments</b><small>taxes, obligations</small></div></div><p class="cap">The five phases of the network implementation plan.</p></div>
+      <div class="g3"><div class="c"><h3>Requirements clarity</h3><p>Aligning the client and the development team early kept scenarios agreed instead of assumed.</p></div><div class="c"><h3>External dependencies</h3><p>Specifications, credentials and test environments were tracked as risks, since others controlled them.</p></div><div class="c"><h3>Where we are</h3><p>The build is in UAT and not yet live. Kick-off was 10 April 2026.</p></div></div></section>
+
+      <section id="a-quality"><div class="eb">Quality &amp; Resilience</div><h2>Controls built in, not bolted on.</h2>
+      <div class="fg"><span class="lb">Built-in controls</span><div class="ly"><div><b>Validation</b><span>Messages checked against their XML or JSON schema</span></div><div><b>Signatures</b><span>Digital signatures verified, sensitive data encrypted</span></div><div><b>Logging</b><span>Every request and response logged, with masked payloads</span></div><div><b>Recovery</b><span>Daily snapshots and a cross-region replica</span></div><div><b>Retention</b><span>30 days live, then archived for up to 10 years</span></div></div><p class="cap">Recovery targets in the design are 10–15 minutes to restore and under 30 seconds of data loss. Targets, not results.</p></div></section>
+
+      <section id="a-outcomes"><div class="eb">Outcomes</div><h2>In UAT, with outcomes still to come.</h2>
+      <p>Adapter isn’t live yet, so there are no launch results to report. The up-front clarification was meant to make UAT a check against agreed behaviour rather than a discovery exercise. I’ll update this page when it goes live.</p></section>
+
+      <section id="a-learned"><div class="eb">Retrospective</div><h2>What I learned</h2><div class="g2">
+      <div><h3>Treat clarity as a deliverable, from week one.</h3><p>In a backend-heavy build, the edge cases are the product. Time spent aligning the client and the team was cheaper than rework later. Next time I’d start a shared scenario list in the first week.</p></div>
+      <div><h3>Track external dependencies like scope.</h3><p>Specifications, credentials and test environments came from outside the team. I’d log each as a dated risk with an owner from day one.</p></div></div></section>
+
+      <section id="a-next"><div class="eb">What’s Next</div><h2>Next</h2><div class="g3"><div class="c"><h3>Complete UAT</h3><p>Resolve findings and prepare for go-live.</p></div><div class="c"><h3>Later phases</h3><p>The plan continues with reversals and disputes, mobile payments and state payments.</p></div><div class="c"><h3>Super app foundation</h3><p>Use instant payments as the financial foundation of a super app.</p></div></div>
+      <p style="margin-top:28px;font-style:italic;font-size:12px">Adapter is an alias. Client, vendor and network names are withheld by agreement.</p></section>
+
+      <section style="padding-top:48px"><div class="eb" style="font-size:15px;color:var(--tx)">Next case studies</div><br />
+      <div class="nx"><a href="/work/horizon"><i><img src="/images/horizon-cover.png" alt="Horizon cover" loading="lazy" /></i><h3>Horizon</h3><p>Full lifecycle of a fund investment: onboarding, capital raising, content and reports.</p></a>
+      <a href="/work/adapter"><i class="o"><img src="/images/adapter-cover.png" alt="Adapter cover" loading="lazy" /></i><h3>Adapter</h3><p>USSD menus connecting core infrastructure to a mobile money wallet.</p></a></div></section>
+    </main>
+  </div>
+  <button class="fab" id="fab" type="button" aria-expanded="false" aria-controls="outline">Contents</button>
+  <div class="bd" id="bd"></div>
+  <script is:inline>
+    const aside=document.getElementById('outline'),cur=document.getElementById('cur'),fab=document.getElementById('fab'),bd=document.getElementById('bd'),
+    links=[...aside.querySelectorAll('a[href^="#"]')].filter(a=>a.hash.length>1),els=links.map(a=>document.getElementById(a.hash.slice(1))),by=h=>links.find(a=>a.hash==='#'+h);
+    const nm=new Map(links.map(a=>[a,a.textContent]));links.forEach(a=>{if(!a.dataset.p){const n=links.filter(x=>x.dataset.p===a.hash.slice(1)).length;if(n)a.insertAdjacentHTML('beforeend','<em>'+n+'</em>')}});
+    let t=false,last='';
+    function spy(){t=false;let i=0;els.forEach((e,k)=>{if(e&&e.getBoundingClientRect().top<=100)i=k});
+    links.forEach(a=>a.classList.remove('on','par'));const l=links[i],pr=l&&l.dataset.p?by(l.dataset.p):null;
+    if(!l) return;
+    l.classList.add('on');if(pr)pr.classList.add('par');
+    const h=els[0].getBoundingClientRect().top>140?'<b>Adapter</b>':(pr?'<span>'+nm.get(pr)+' · </span>':'')+'<b>'+nm.get(l)+'</b>';
+    if(h!==last){cur.innerHTML=h;last=h}}
+    function sheet(o,f){aside.classList.toggle('open',o);bd.classList.toggle('on',o);document.body.classList.toggle('lock',o);fab.setAttribute('aria-expanded',o);fab.textContent=o?'✕ Close':'Contents';if(o){const c=aside.querySelector('a.on');if(c)aside.scrollTop=c.offsetTop-aside.clientHeight/2}if(f!==false)(o?aside:fab).focus({preventScroll:true})}
+    fab.onclick=()=>sheet(!aside.classList.contains('open'));bd.onclick=()=>sheet(false);
+    aside.addEventListener('click',e=>{if(e.target.closest('a')&&aside.classList.contains('open'))sheet(false,false)});
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&aside.classList.contains('open'))sheet(false)});
+    addEventListener('resize',()=>{if(innerWidth>900&&aside.classList.contains('open'))sheet(false,false)});
+    addEventListener('scroll',()=>{if(!t){t=true;requestAnimationFrame(spy)}},{passive:true});spy();
+  </script>
+</Base>

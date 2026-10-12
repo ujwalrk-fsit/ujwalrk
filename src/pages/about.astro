@@ -1,30 +1,62 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="About · Ujwal" description="BA x Design Engineer generalist — analysis, prototyping, delivery." current="about">
-  <div class="page">
-    <div class="eyebrow">About</div>
-    <h1 style="font-size:34px;font-weight:400;margin:6px 0">Generalist at the intersection of analysis, design and delivery.</h1>
-    <p>I work as Business Analyst / Product Owner who can also prototype and reason about systems. On Horizon I owned what the platform had to do — requirements, scope, trade-offs, change control — while a team of 1 SM, 1 designer, 1 DevOps, 1 QA (from April) and 5 full-stack devs built it.</p>
+<Base title="About · Ujwal Ramesh Karajgikar" description="Business Analyst at Fortunesoft IT Innovations: story, how I work, experience, skills." current="about">
+  <div class="page hm">
+    <h1>About</h1>
+    <p>Reliable, innovative, and dynamic individual with experience in business analytics, AI assisted development, data analytics and user experience. Skilled in Python, AWS, and modern development tools, with a focus on DevOps concepts and leading teams. Quick to learn new technologies and committed to consistent professional growth.</p>
+    <p>Currently working as a Business Analyst, supporting stakeholder needs through requirement analysis, process optimization, and data-driven insights while continuing to build technical depth.</p>
+    <p><a href="/resume.pdf" style="font-size:13px;text-decoration:underline;text-underline-offset:4px">View resume (PDF)</a></p>
 
-    <div class="g3">
-      <div class="c"><h3>Analysis</h3><p>Discovery, requirements, KYC/suitability funnels, privilege matrices (14 modules), audit &amp; compliance scope, Jira workflows.</p></div>
-      <div class="c"><h3>Design engineering</h3><p>Same-mental-model flows, role-specific dashboards, HTML/CSS prototypes, e-signature template thinking, status-as-communication.</p></div>
-      <div class="c"><h3>Delivery</h3><p>Scrum 2-week sprints, backlog refinement with client, 3 change requests scoped in writing, UAT → prod, migration &amp; rebrand holds.</p></div>
-    </div>
+    <h2 class="hs">Story</h2>
+    <p>I started out building and making: running the brand and social media for a student club, publishing WordPress pages for IEEE CAS Bangalore, and learning cloud automation as an intern, with Ansible and Terraform on AWS.</p>
+    <p>Business analysis is where that mix turned out to matter. At Fortunesoft IT Innovations I translate requirements for FinTech, Healthcare and Life Sciences clients into actions teams can build, and I still prototype and ship my own projects to keep my technical depth current.</p>
+    <p>Two recent engagements show the range: an investment platform that moved a business off spreadsheets and phone calls onto one system, and a payments middleware that connects a USSD menu to a national instant-payment network.</p>
 
-    <h2>Skills matrix — derived from Horizon</h2>
+    <h2 class="hs">At a glance</h2>
     <div class="g2">
-      <div class="c"><h3>Product &amp; domain</h3><p>Secondary-market lifecycle: Submitted → Approved → Subscribed → Allocated. Investor tiers Lite → Plus → Pro, joint/IRA/entity accounts, fund closure FIFO, unit batches &amp; cost basis.</p></div>
-      <div class="c"><h3>Decisions I owned</h3><p>Tiers as funnel, manual wire over failed processor path, native e-sign over 10s vendor screen, K8s cost cut $1.5k→&lt;$800, CSV user migration now / docs later.</p></div>
-      <div class="c"><h3>Platform literacy</h3><p>Cognito + RBAC checked live, KMS envelope + field-level encryption, RabbitMQ + Redis pub/sub + SSE, Linkerd mTLS, OTel → Grafana, SonarQube + canary.</p></div>
-      <div class="c"><h3>Ways of working</h3><p>One source of truth in Jira, handover checklists, sizing sign-offs, versioned user manual as knowledge base for future assistant.</p></div>
+      <div class="c"><h3>Role</h3><p>Business Analyst</p></div>
+      <div class="c"><h3>Since</h3><p>September 2025</p></div>
+      <div class="c"><h3>Sectors</h3><p>FinTech, Healthcare, Life Sciences</p></div>
+      <div class="c"><h3>Works with</h3><p>Jira, Confluence, Miro, Figma</p></div>
     </div>
 
-    <div class="fg"><span class="lb">Resume</span><div><p style="margin:0">PDF coming soon. Until then, Horizon is the resume: <a href="/work/horizon">read the case study</a>.</p><p class="cap">TODO: add public/resume.pdf and link here.</p></div></div>
+    <h2 class="hs">Working on now</h2>
+    <div class="g2">
+      <div class="c"><h3>Horizon</h3><p>An investment platform now live: about 1,000 investors migrated, three change requests delivered, and phase 2 being planned.</p><p><a href="/work/horizon">Case study →</a></p></div>
+      <div class="c"><h3>Adapter</h3><p>A payments middleware in UAT, following a five-phase plan, with instant payments as the foundation for a future super app.</p><p><a href="/work/adapter">Case study →</a></p></div>
+    </div>
 
-    <h2>What I'd do differently</h2>
-    <p>Test external dependencies in discovery (payment eligibility), and write handovers + assumptions down as deliverables.</p>
-    <p>Contact: <a href="mailto:hello@example.com">hello@example.com</a> — replace with your address. Add LinkedIn/GitHub in Base footer.</p>
+    <h2 class="hs">How I work</h2>
+    <div class="g3">
+      <div class="c"><h3>Clarity before code</h3><p>Backend-heavy systems hide their risk in edge cases. I turn open questions into agreed scenarios with the client and the team first, so rework stays cheap.</p></div>
+      <div class="c"><h3>Make status visible</h3><p>Every handoff should show where it stands, in the product and in Jira, not in messages that get missed.</p></div>
+      <div class="c"><h3>Keep scope honest</h3><p>Infrastructure, extras and new ideas become visible change requests with estimates, so the client always knows what they are choosing.</p></div>
+      <div class="c"><h3>Write it down</h3><p>Requirements, flow designs and user manuals are living documents with version history, so knowledge does not leave when people do.</p></div>
+      <div class="c"><h3>Plan around dependencies</h3><p>Specifications, credentials and test environments often come from third parties. I track them as dated risks with owners.</p></div>
+      <div class="c"><h3>Prototype to align</h3><p>I wireframe and build small prototypes so conversations with designers and developers stay concrete.</p></div>
+    </div>
+
+    <h2 class="hs">Experience</h2>
+    <div class="it"><small>September 2025 - Present</small><h3>Business Analyst - Fortunesoft IT Innovations Pvt. Ltd. - (On-Site)</h3><p>Translating complex requirements into actionable solutions for the FinTech, Healthcare and Life Sciences sectors.</p>
+      <ul class="hl"><li>Own requirements, Jira workflows, wireframes and change-request management on two fintech platforms: an investment platform now live and a payments middleware in UAT.</li><li>Align clients and engineering teams, turning open questions into agreed scenarios before anything is built.</li><li>Scope future phases with clients, from a mobile app to instant payments as the base for a super app.</li><li>Maintain the project knowledge base, including a version-controlled user manual and requirement documents.</li></ul>
+    </div>
+    <div class="it"><small>November 2022 - January 2025</small><h3>Brand Development Lead - Siggraph BNMIT - Student Club (On-Site)</h3><p>Grew social media by 200%, launched successful merchandise, and organized major events to scale the club.</p></div>
+    <div class="it"><small>June 2023 - July 2024</small><h3>Web Developer - IEEE CAS Bangalore (Remote)</h3><p>Created and optimized WordPress pages, managing content and improving website accessibility.</p></div>
+    <div class="it"><small>September 2023 - October 2023</small><h3>Cloud &amp; DevOps Intern - Subhanu Technologies and Solutions Pvt. Ltd. (On-Site)</h3><p>Developed automation scripts with Ansible and Terraform, gaining practical experience with AWS and Linux fundamentals.</p></div>
+
+    <h2 class="hs">Skills</h2>
+    <div class="it"><h3 style="margin:0 0 8px">Business Analytics</h3><div class="tg"><span>Teams</span><span>Jira</span><span>Confluence</span><span>Excel</span><span>Word</span><span>Powerpoint</span><span>Miro</span><span>FigJam</span><span>Figma</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">AI Integrations &amp; Tools</h3><div class="tg"><span>Claude</span><span>ChatGPT</span><span>Gemini</span><span>OpenCode</span><span>Cursor</span><span>VS Code</span><span>Antigravity</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">Languages</h3><div class="tg"><span>Python</span><span>Java</span><span>JavaScript</span><span>SQL</span><span>R</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">Web Dev</h3><div class="tg"><span>HTML</span><span>CSS</span><span>JS</span><span>TS</span><span>React.js</span><span>Next.js</span><span>Supabase</span><span>Firebase</span><span>Material UI</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">DevOps</h3><div class="tg"><span>Ubuntu WSL CLI</span><span>Git</span><span>GitHub</span><span>AWS</span><span>Jenkins</span><span>Ansible</span><span>Terraform</span><span>Docker</span><span>K8s</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">Miscellaneous</h3><div class="tg"><span>Zapier</span><span>Adobe Ps</span><span>Adobe Pr</span><span>Power BI</span><span>Tableau</span><span>Qlik Sense</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">Methods</h3><div class="tg"><span>Requirements and user stories</span><span>Scenario and edge-case analysis</span><span>Process and flow mapping</span><span>Change-request management</span><span>UAT planning and support</span><span>Backlog refinement</span><span>Sprint ceremonies</span><span>Wireframing</span><span>Technical documentation</span><span>API and schema reading</span></div></div>
+    <div class="it"><h3 style="margin:0 0 8px">Domains</h3><div class="tg"><span>FinTech</span><span>Investment platforms</span><span>Mobile money</span><span>Instant payments</span><span>Healthcare</span><span>Life Sciences</span></div></div>
+
+    <p style="margin-top:16px;font-size:13px">Side projects live on <a href="/play">Play</a>. Co-curriculars, certificates and outside interests live on <a href="/notes">Notes</a>.</p>
+
+    <div class="co"><div><h3>Want to talk about a project?</h3><p>I’m happy to walk through either case study, including the parts that don’t fit on a page.</p></div><div class="ba2"><a class="bt" href="mailto:ukarajgikar@gmail.com">Get in touch</a><a class="bt o" href="/resume.pdf">View resume</a></div></div>
   </div>
 </Base>
