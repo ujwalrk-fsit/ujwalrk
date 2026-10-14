@@ -9,6 +9,12 @@ interface Props {
 }
 const { title, description = 'Business Analyst x Design Engineer — portfolio bridging business and engineering.', current, accent } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Work', key: 'home' },
+  { href: '/about', label: 'About', key: 'about' },
+  { href: '/play', label: 'Play', key: 'play' },
+  { href: '/notes', label: 'Notes', key: 'notes' },
+];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -31,31 +37,47 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString(
   <header class="site-nav">
     <div class="in">
       <a class="brand" href="/"><b>Ujwal Ramesh Karajgikar</b><span>Business Analyst + Design Engineer</span></a>
-      <nav aria-label="Primary">
-        <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Work</a>
-        <a href="/about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
-        <a href="/play" aria-current={current === 'play' ? 'page' : undefined}>Play</a>
-        <a href="/notes" aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
-        <a href="/resume.pdf">Resume</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteLinks" aria-label="Open menu">
+        <svg class="ico-open" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2 5h16M2 10h16M2 15h16"/></svg>
+        <svg class="ico-close" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 4l12 12M16 4L4 16"/></svg>
+      </button>
+      <nav id="siteLinks" aria-label="Primary">
+        {links.map((l) => (
+          <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>
+            {l.label}
+            <svg class="chev" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+          </a>
+        ))}
+        <a href="/resume.pdf" aria-current={current === 'resume' ? 'page' : undefined}>
+          Resume
+          <svg class="ext" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M9 2h5v5M14 2L7 9M12 9v4H3V4h4"/></svg>
+        </a>
       </nav>
     </div>
   </header>
   <main id="main">
     <slot />
   </main>
-  <div class="page">
-    <footer class="site-footer" id="contact">
+  <footer class="site-foot">
+    <div class="site-footer">
       <div class="ft-tag">
         Bridging business needs with product value
         <span class="ft-note">Horizon and Adapter are aliases. Client, vendor and product names are withheld by agreement.</span>
       </div>
       <div class="ft-links">
-        <a href="/resume.pdf">Resume</a>
         <a href="https://www.linkedin.com/in/ujwal-karajgikar">LinkedIn</a>
         <a href="https://github.com/ujwalrk-fsit/ujwalrk">GitHub</a>
         <a href="mailto:ukarajgikar@gmail.com">Email</a>
       </div>
-    </footer>
-  </div>
+    </div>
+  </footer>
+  <script is:inline>
+    const toggle=document.getElementById('navToggle'),links=document.getElementById('siteLinks');
+    const set=(o)=>{links.classList.toggle('open',o);toggle.setAttribute('aria-expanded',o);toggle.setAttribute('aria-label',o?'Close menu':'Open menu')};
+    toggle.onclick=()=>set(!links.classList.contains('open'));
+    links.addEventListener('click',e=>{if(e.target.closest('a'))set(false)});
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&links.classList.contains('open')){set(false);toggle.focus()}});
+    addEventListener('resize',()=>{if(innerWidth>900&&links.classList.contains('open'))set(false)});
+  </script>
 </body>
 </html>
