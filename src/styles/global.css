@@ -7,7 +7,7 @@
   --wrap:75rem;            /* max content width */
   --pad:clamp(1.25rem,4vw,2.25rem);  /* responsive gutter */
   --pad-y:2.25rem;         /* vertical page padding */
-  --nav-h:3.25rem;         /* header height, used for sticky offsets */
+  --nav-h:4.25rem;         /* header height — pinned via .site-nav .in min-height */
   --icon-stroke:1.3;       /* single icon stroke weight */
 }
 body.cs-purple{--pu:#7a3fd0;--pu-soft:#e9d9fa;--pu-ink:#e7d9fb}
@@ -22,7 +22,7 @@ img{max-width:100%;height:auto}
 
 /* ---- header ---- */
 .site-nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(0.5rem);-webkit-backdrop-filter:blur(0.5rem);border-bottom:0.0625rem solid var(--ln)}
-.site-nav .in{position:relative;max-width:var(--wrap);margin:0 auto;padding:0.875rem var(--pad);display:flex;align-items:center;gap:1.25rem}
+.site-nav .in{position:relative;max-width:var(--wrap);margin:0 auto;padding:0.875rem var(--pad);display:flex;align-items:center;gap:1.25rem;min-height:var(--nav-h)}
 .nav-toggle{display:none;margin-left:auto;align-items:center;justify-content:center;width:2.375rem;height:2.375rem;border:0.0625rem solid var(--ln);border-radius:0.375rem;background:#fff;color:var(--tx);cursor:pointer}
 .nav-toggle:hover{border-color:var(--tx)}
 .nav-toggle .ico-close{display:none}
@@ -36,7 +36,9 @@ img{max-width:100%;height:auto}
 .site-nav nav a:hover{color:var(--tx)}
 .site-nav nav a[aria-current="page"]{color:var(--tx);font-weight:500}
 .site-nav nav a svg{display:none}
-.nav-toggle svg,.site-nav nav a svg{fill:none;stroke:currentColor;stroke-width:var(--icon-stroke);stroke-linecap:round;stroke-linejoin:round}
+/* menu button icons are solid, no stroke; nav chevrons stay stroked */
+.nav-toggle svg{fill:currentColor;stroke:none}
+.site-nav nav a svg{fill:none;stroke:currentColor;stroke-width:var(--icon-stroke);stroke-linecap:round;stroke-linejoin:round}
 
 /* ---- layout ---- */
 .page{max-width:var(--wrap);margin:0 auto;padding:2.25rem var(--pad)}
@@ -219,7 +221,7 @@ blockquote span{display:block;font-size:0.8125rem;color:var(--mu);margin-top:0.3
   .work-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:56.25rem){
-  :root{--nav-h:3.75rem}
+  :root{--nav-h:4.5rem}
   .brand{flex-direction:column;align-items:flex-start;gap:0.125rem}
   .brand span{white-space:normal}
   .work-grid{grid-template-columns:1fr}

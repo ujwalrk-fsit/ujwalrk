@@ -105,6 +105,7 @@ import Base from '../../layouts/Base.astro';
   <button class="fab" id="fab" type="button" aria-expanded="false" aria-controls="outline">Contents</button>
   <div class="bd" id="bd"></div>
   <script is:inline>
+    (()=>{
     const aside=document.getElementById('outline'),cur=document.getElementById('cur'),fab=document.getElementById('fab'),bd=document.getElementById('bd'),
     links=[...aside.querySelectorAll('a[href^="#"]')].filter(a=>a.hash.length>1),els=links.map(a=>document.getElementById(a.hash.slice(1))),by=h=>links.find(a=>a.hash==='#'+h);
     const nm=new Map(links.map(a=>[a,a.textContent]));links.forEach(a=>{if(!a.dataset.p){const n=links.filter(x=>x.dataset.p===a.hash.slice(1)).length;if(n)a.insertAdjacentHTML('beforeend','<em>'+n+'</em>')}});
@@ -121,5 +122,6 @@ import Base from '../../layouts/Base.astro';
     addEventListener('keydown',e=>{if(e.key==='Escape'&&aside.classList.contains('open'))sheet(false)});
     addEventListener('resize',()=>{if(innerWidth>900&&aside.classList.contains('open'))sheet(false,false)});
     addEventListener('scroll',()=>{if(!t){t=true;requestAnimationFrame(spy)}},{passive:true});spy();
+    })();
   </script>
 </Base>
