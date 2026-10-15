@@ -6,9 +6,10 @@
   /* Outside the case studies the accent is black: white text on black. */
   --pu:#1b1b1f;
   --pu-soft:#ebebee; --pu-ink:#f2f2f3; --card:#ffffff; --soft:#f0f3f6;
-  /* Accent hues belong to one case study each, and to nothing else. */
-  --cs-horizon:#7a3fd0;
-  --cs-adapter:#f37a21;
+  /* Accent hues belong to one case study each, and to nothing else.
+     Each has a soft companion used for panels on that case study only. */
+  --cs-horizon:#7635b4;      --cs-horizon-soft:#ebdcf8;
+  --cs-adapter:#f37a21;      --cs-adapter-soft:#fde6d4;
   /* accent roles — each case study gets one hue, used the same way everywhere.
      --pu-solid/--pu-deep/--pk default to --pu so a single hue covers fills,
      markers and accent text unless a palette overrides them. */
@@ -21,8 +22,8 @@
   --nav-h:3.25rem;         /* header height, used for sticky offsets */
   --icon-stroke:1.3;       /* single icon stroke weight */
 }
-body.cs-purple{--pu:var(--cs-horizon);--pu-soft:#e9d9fa;--pu-ink:#e7d9fb}
-body.cs-orange{--pu:var(--cs-adapter);--pu-soft:#fde6d4;--pu-ink:#fff1e6}
+body.cs-purple{--pu:var(--cs-horizon);--pu-soft:var(--cs-horizon-soft);--pu-ink:#efe4f8}
+body.cs-orange{--pu:var(--cs-adapter);--pu-soft:var(--cs-adapter-soft);--pu-ink:#fff1e6}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 0.75rem)}
@@ -172,7 +173,7 @@ blockquote span{display:block;font-size:0.8125rem;color:var(--mu);margin-top:0.3
 .gt .m{text-align:center;color:var(--mu);font-size:0.625rem;padding:0 0 0.25rem}
 .gt i{font-style:normal;background:var(--pu-solid);color:#fff;padding:0.375rem 0.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gt .g{background:var(--pu-deep);color:#fff;padding:0.375rem 0.125rem;text-align:center}
-.fg{background:#f0f3f6;border:0.0625rem solid #dde3e8;border-radius:0.125rem;padding:1rem 1.25rem 1.25rem;margin:1rem 0}
+.fg{background:var(--pu-soft);border:0.0625rem solid #dde3e8;border-radius:0.125rem;padding:1rem 1.25rem 1.25rem;margin:1rem 0}
 .fg .lb{display:block;font:400 0.75rem/1 'DM Mono',ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:#8b99a8}
 .fg>div{margin:0.875rem 0 0}
 .fg>div+div{margin-top:0.625rem}
