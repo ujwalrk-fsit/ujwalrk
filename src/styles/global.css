@@ -4,8 +4,9 @@
 :root{
   --bg:#f9fafb; --tx:#1b1b1f; --mu:#6e6e76; --ln:#e6e7ea; --pu:#3f3f46;
   --pu-soft:#ebebee; --pu-ink:#d4d4d8; --card:#ffffff; --soft:#f0f3f6;
-  /* accent roles — case studies override. Text on any solid fill is always #fff,
-     so --pu-solid must hold >= 4.5:1 against white (WCAG AA). */
+  /* accent roles — each case study gets one hue, used the same way everywhere.
+     --pu-solid/--pu-deep/--pk default to --pu so a single hue covers fills,
+     markers and accent text unless a palette overrides them. */
   --pu-solid:var(--pu);   /* surface that carries white text */
   --pu-deep:var(--pu);    /* strongest fill: markers, single highlighted cell */
   --pk:var(--pu);         /* accent-coloured text on light background */
@@ -15,10 +16,8 @@
   --nav-h:3.25rem;         /* header height, used for sticky offsets */
   --icon-stroke:1.3;       /* single icon stroke weight */
 }
-body.cs-purple{--pu:#7a3fd0;--pu-soft:#e9d9fa;--pu-ink:#e7d9fb;--pu-deep:#5b21b6}
-/* #f37a21 is only 2.76:1 with white, so surfaces carrying white text use
-   #c2410c (5.18:1) and orange text on light backgrounds uses #b4540b (5.02:1). */
-body.cs-orange{--pu:#f37a21;--pu-soft:#fde6d4;--pu-ink:#fff1e6;--pu-solid:#c2410c;--pu-deep:#7c2d12;--pk:#b4540b}
+body.cs-purple{--pu:#7a3fd0;--pu-soft:#e9d9fa;--pu-ink:#e7d9fb}
+body.cs-orange{--pu:#f37a21;--pu-soft:#fde6d4;--pu-ink:#fff1e6}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 0.75rem)}
