@@ -2,8 +2,13 @@
    Accent is grayscale by default; case studies override.
    Horizon = purple, Adapter = orange (scoped via body.cs-purple / body.cs-orange). */
 :root{
-  --bg:#f9fafb; --tx:#1b1b1f; --mu:#6e6e76; --ln:#e6e7ea; --pu:#3f3f46;
-  --pu-soft:#ebebee; --pu-ink:#d4d4d8; --card:#ffffff; --soft:#f0f3f6;
+  --bg:#f9fafb; --tx:#1b1b1f; --mu:#6e6e76; --ln:#e6e7ea;
+  /* Outside the case studies the accent is black: white text on black. */
+  --pu:#1b1b1f;
+  --pu-soft:#ebebee; --pu-ink:#f2f2f3; --card:#ffffff; --soft:#f0f3f6;
+  /* Accent hues belong to one case study each, and to nothing else. */
+  --cs-horizon:#7a3fd0;
+  --cs-adapter:#f37a21;
   /* accent roles — each case study gets one hue, used the same way everywhere.
      --pu-solid/--pu-deep/--pk default to --pu so a single hue covers fills,
      markers and accent text unless a palette overrides them. */
@@ -16,8 +21,8 @@
   --nav-h:3.25rem;         /* header height, used for sticky offsets */
   --icon-stroke:1.3;       /* single icon stroke weight */
 }
-body.cs-purple{--pu:#7a3fd0;--pu-soft:#e9d9fa;--pu-ink:#e7d9fb}
-body.cs-orange{--pu:#f37a21;--pu-soft:#fde6d4;--pu-ink:#fff1e6}
+body.cs-purple{--pu:var(--cs-horizon);--pu-soft:#e9d9fa;--pu-ink:#e7d9fb}
+body.cs-orange{--pu:var(--cs-adapter);--pu-soft:#fde6d4;--pu-ink:#fff1e6}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--nav-h) + 0.75rem)}
@@ -191,8 +196,8 @@ blockquote span{display:block;font-size:0.8125rem;color:var(--mu);margin-top:0.3
 .it .tg{margin-top:0.625rem}
 .nx{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
 .nx a{text-decoration:none}
-.nx i{display:grid;place-items:center;min-height:10.625rem;color:#fff;font-size:1.625rem;font-style:normal;font-weight:500;margin-bottom:0.5rem;background:linear-gradient(115deg,#a56be0,#6a2db0 40%,#a977e3);overflow:hidden;border-radius:0.125rem}
-.nx .o{background:linear-gradient(115deg,#ff7a14,#ff8d2e 40%,#ffb27a)}
+.nx i{display:grid;place-items:center;min-height:10.625rem;color:#fff;font-size:1.625rem;font-style:normal;font-weight:500;margin-bottom:0.5rem;background:var(--cs-horizon);overflow:hidden;border-radius:0.125rem}
+.nx .o{background:var(--cs-adapter)}
 .nx i img{width:100%;height:100%;object-fit:cover;display:block}
 .nx h3{display:flex;justify-content:space-between;gap:0.5rem}
 .nx h3 small{font-weight:400;color:var(--mu);font-size:0.75rem;white-space:nowrap}
