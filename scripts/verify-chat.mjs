@@ -355,7 +355,46 @@ const missing = expected.filter((f) => {
 check('4.pages', missing.length === 0, `all ${expected.length} routes prerendered to HTML`, `missing: ${missing.join(', ')}`);
 check('4.noserver', !existsSync(join(DIST, '.vercel')), 'no .vercel function output in dist', 'unexpected server output in dist');
 
-/* ------------------------------------------------------------------ 5 */
+/* ------------------------------------------- 4b every page gets the layout */
+console.log('\n4b. Every route renders the full layout and links the stylesheet');
+
+const PAGES = [
+  ['dist/index.html', '/'],
+  ['dist/about/index.html', '/about'],
+  ['dist/play/index.html', '/play'],
+  ['dist/notes/index.html', '/notes'],
+  ['dist/chat/index.html', '/chat'],
+  ['dist/work/horizon/index.html', '/work/horizon'],
+  ['dist/work/adapter/index.html', '/work/adapter'],
+];
+
+for (const [file, route] of PAGES) {
+  const html = read(file);
+  const cssLinked = /<link[^>]*rel="stylesheet"[^>]*href="\/_astro\/[^"]+\.css"/.test(html);
+  const isDocument = /^<!DOCTYPE html>/i.test(html.trim());
+  const hasHead = /<head>[\s\S]*<\/head>/.test(html);
+  const hasChrome = html.includes('class="site-nav"') && html.includes('class="site-footer"');
+  if (!isDocument || !hasHead || !cssLinked || !hasChrome) {
+    fail(
+      '4b',
+      `${route} is incomplete — doctype:${isDocument} head:${hasHead} css:${cssLinked} header+footer:${hasChrome}`,
+    );
+  }
+}
+check(
+  '4b',
+  true,
+  `all ${PAGES.length} routes emit a full document with the stylesheet, header and footer`,
+  'see failures above',
+);
+
+check(
+  '4b.chat',
+  read('dist/chat/index.html').length > 3000,
+  '/chat is a full document, not a bare fragment',
+  '/chat rendered as a fragment — the layout wrapper is missing',
+);
+
 console.log('\n5. No network, no storage, no logging in shipped assets');
 
 const shipped = walk(join(DIST, '_astro'))

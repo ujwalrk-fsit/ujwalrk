@@ -3,7 +3,13 @@ import Base from '../layouts/Base.astro';
 import ChatWidget from '../components/ChatWidget.astro';
 ---
 
-<div class="page page--chat">
-  <h1 class="sr-only">Chat with Ujwal</h1>
-  <ChatWidget variant="page" />
-</div>
+<Base
+  title="Chat · Ujwal Ramesh Karajgikar"
+  description="Ask questions about Ujwal's work as a Business Analyst — Horizon, Adapter, skills and experience. Answers are grounded in this site and cite their source."
+  current="chat"
+>
+  <div class="page page--chat">
+    <h1 class="sr-only">Chat with Ujwal</h1>
+    <ChatWidget variant="page" />
+  </div>
+</Base>
