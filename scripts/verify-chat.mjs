@@ -216,19 +216,48 @@ const launcherAbove = css.match(/body:has\(\.fab\) \.chat-launcher\{[^}]*bottom:
 const panelAbove = css.match(/body:has\(\.fab\) \.chat--launcher \.chat-panel\{[^}]*bottom:\s*([\d.]+)rem/)?.[1];
 
 check('3.fab', fabHeight === '2.5', `Contents bar height is ${fabHeight}rem`, `Contents bar height is ${fabHeight}rem, expected 2.5rem`);
-// The overlay is a centred modal, so it clears the Contents bar by stacking and
-// scrimming over it rather than by being offset above it.
+// The overlay is a bottom-right chatbot widget: anchored, opaque, no scrim and
+// no backdrop blur, so the page behind stays legible and unfiltered.
 check(
   '3.overlay',
-  /\.chat-scrim\{[^}]*position:fixed;inset:0[^}]*z-index:25/.test(css) &&
-    /\.chat--launcher \.chat-panel\{[^}]*inset:0;margin:auto/.test(css),
-  'overlay is centred with a full-viewport scrim above the Contents bar',
-  'overlay is not a centred scrimmed modal',
+  /\.chat--launcher \.chat-panel\{[^}]*position:fixed[^}]*right:1rem;bottom:1rem/.test(css),
+  'overlay is anchored bottom-right',
+  'overlay is not anchored bottom-right',
+);
+check(
+  '3.noscrim',
+  !/chat-scrim/.test(css) && !/chat-scrim/.test(read('src/lib/agent-client.ts')),
+  'no scrim element or rule remains',
+  'a scrim is still present',
+);
+check(
+  '3.noblur',
+  !/\.chat-panel\{[^}]*backdrop-filter/.test(css) && !/\.chat--launcher \.chat-panel\{[^}]*backdrop-filter/.test(css),
+  'overlay does not blur the background behind it',
+  'the overlay applies a backdrop-filter blur',
+);
+check(
+  '3.left',
+  /\.chat--launcher \.chat-empty\{[^}]*align-items:stretch[^}]*text-align:left/.test(css),
+  'overlay text is left-aligned, not centred',
+  'overlay text is still centred',
+);
+// Structural intent is asserted against the authored stylesheet: the minifier
+// reorders declarations, so shipped-CSS string matches are brittle.
+const srcCss = read('src/styles/global.css');
+
+check(
+  '3.identity',
+  /'chat-identity'/.test(read('src/lib/agent-client.ts')) &&
+    /\.chat-identity\{/.test(srcCss) &&
+    /\.chat-avatar\{/.test(srcCss),
+  'overlay has a chatbot identity band with an avatar',
+  'overlay identity band missing',
 );
 check(
   '3.z',
   /\.chat-launcher\{[^}]*z-index:24/.test(css) && /\.chat--launcher \.chat-panel\{[^}]*z-index:26/.test(css),
-  'launcher (24), scrim (25) and panel (26) stack in the right order',
+  'launcher (24) and panel (26) stack above the page',
   'z-index layering is wrong',
 );
 
@@ -252,10 +281,18 @@ check(
 );
 check(
   '3b.modal',
-  /\.chat--launcher \.chat-panel\{[^}]*height:min\(38rem,calc\(100vh - 4rem\)\)/.test(css) &&
-    /\.chat--launcher \.chat-panel\{[^}]*max-height:calc\(100dvh - 4rem\)/.test(css),
-  'overlay height is a deliberate modal size with a dynamic-viewport cap',
-  'overlay height is not defined as a capped modal',
+  /\.chat--launcher \.chat-panel\{[^}]*height:auto/.test(css) &&
+    /\.chat--launcher \.chat-panel\{[^}]*max-height:calc\(100dvh - var\(--nav-h\) - 2rem\)/.test(css),
+  'overlay sizes to its content, capped by the space below the header',
+  'overlay is not content-sized with a dynamic-viewport cap',
+);
+check(
+  '3b.width',
+  /\.page--chat\{[^}]*max-width:var\(--wrap\)/.test(srcCss) &&
+    /\.page--chat\{[^}]*margin:0 auto/.test(srcCss) &&
+    /@media\(min-width:56\.3125rem\)\{\.page--chat\{padding-left:2\.25rem;padding-right:2\.25rem\}\}/.test(srcCss),
+  '/chat matches the nav container width and its desktop inset',
+  '/chat is not aligned to the nav container width',
 );
 check(
   '3b.page',

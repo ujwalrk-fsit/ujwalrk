@@ -2,9 +2,9 @@
  * DOM layer for the CHAT agent. Mounted as an ES module by Astro, so it has its
  * own scope and cannot collide with the other inline scripts on the page.
  *
- * Two states, per the reference layout:
- *   empty        centred greeting, composer, suggestion chips
- *   conversation slim header, transcript, composer in a footer with a disclaimer
+ * Two surfaces:
+ *   /chat      full page, centred empty state, conversation with footer composer
+ *   overlay    bottom-right chatbot widget, always left-aligned
  */
 
 import type { Scope } from '../data/kb';
@@ -12,17 +12,6 @@ import { PROFILE, SUGGESTIONS } from '../data/kb';
 import { compose, leaks, search, type Answer } from './agent';
 
 const DRAFT_INTENTS = ['draft an intro email', 'draft an email', 'write an email', 'intro email', 'email me'];
-
-/** Quick commands for the overlay — plain navigation, no retrieval needed. */
-const COMMANDS: { label: string; href?: string; ask?: string }[] = [
-  { label: 'Read the Horizon case study', href: '/work/horizon' },
-  { label: 'Read the Adapter case study', href: '/work/adapter' },
-  { label: 'What results did he ship?', ask: 'What results did Horizon produce' },
-  { label: 'Experience and skills', ask: 'What tools and skills do you have' },
-  { label: 'How he works', ask: 'What is it like working with you' },
-  { label: 'Download resume', href: PROFILE.resume },
-  { label: 'Email Ujwal', href: `mailto:${PROFILE.email}` },
-];
 
 const ICON = {
   diamond: `<svg width="9" height="9" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0.6 15.4 8 8 15.4 0.6 8Z" fill="currentColor"/></svg>`,
@@ -68,17 +57,25 @@ export function mountChat(root: HTMLElement): void {
   panel.id = 'chat-panel';
   panel.setAttribute('aria-label', 'Chat with Ujwal');
 
-  const scrim = el('div', 'chat-scrim');
+  /* identity — overlay only, always visible */
+  let identity: HTMLElement | null = null;
+  if (!isPage) {
+    identity = el('header', 'chat-identity');
+    const avatar = el('span', 'chat-avatar');
+    avatar.innerHTML = ICON.diamond;
+    const who = el('span', 'chat-identity-text');
+    who.append(el('b', null, 'Chat'), el('small', null, 'Ask me about my work'));
+    identity.append(avatar, who);
+  }
 
-  /* header — conversation state only */
+  /* conversation header — /chat only */
   const head = el('header', 'chat-head');
-  head.hidden = true;
+  head.hidden = !isPage;
   const backBtn = el('button', 'chat-back');
   backBtn.type = 'button';
   backBtn.setAttribute('aria-label', 'Clear conversation');
   backBtn.innerHTML = ICON.back;
-  const headTitle = el('span', 'chat-head-title', 'Chat');
-  head.append(backBtn, headTitle);
+  head.append(backBtn, el('span', 'chat-head-title', 'Chat'));
 
   /* empty state */
   const empty = el('div', 'chat-empty');
@@ -96,13 +93,18 @@ export function mountChat(root: HTMLElement): void {
 
   /* footer */
   const foot = el('div', 'chat-foot');
+  const note = el(
+    'p',
+    'chat-note',
+    'Static agent — no language model, so it can be wrong. Answers come from this site; nothing you type is sent anywhere.',
+  );
+  foot.append(note);
 
   const composer = el('form', 'chat-composer');
   const plusBtn = el('button', 'chat-plus');
   plusBtn.type = 'button';
   plusBtn.setAttribute('aria-label', 'Show example questions');
   plusBtn.setAttribute('aria-expanded', 'true');
-  plusBtn.setAttribute('aria-controls', 'chat-chips');
   plusBtn.innerHTML = ICON.plus;
   const input = el('textarea', 'chat-input');
   input.rows = 1;
@@ -117,15 +119,8 @@ export function mountChat(root: HTMLElement): void {
   stopBtn.hidden = true;
   composer.append(plusBtn, input, stopBtn, sendBtn);
 
-  const note = el(
-    'p',
-    'chat-note',
-    'Static agent — no language model, so it can be wrong. Answers come from this site; nothing you type is sent anywhere.',
-  );
-
-  panel.append(head, empty, log, foot);
-  if (isPage) foot.append(composer, note);
-  shell.append(...(isPage ? [panel] : [scrim, launcher, panel]));
+  panel.append(...(identity ? [identity] : []), head, empty, log, foot);
+  shell.append(...(isPage ? [panel] : [launcher, panel]));
   root.append(shell);
 
   /* ------------------------------------------------------------------ state */
@@ -134,7 +129,7 @@ export function mountChat(root: HTMLElement): void {
     const talking = turns.length > 0;
     empty.hidden = talking;
     log.hidden = !talking;
-    head.hidden = !talking;
+    head.hidden = !talking || !isPage;
     if (talking) foot.prepend(composer);
     else empty.insertBefore(composer, tryLabel);
   }
@@ -158,7 +153,7 @@ export function mountChat(root: HTMLElement): void {
   /* ---------------------------------------------------------------- render */
   function renderChips(): void {
     chips.textContent = '';
-    for (const s of SUGGESTIONS.slice(0, 5)) {
+    for (const s of SUGGESTIONS.slice(0, isPage ? 5 : 3)) {
       const b = el('button', 'chat-chip');
       b.type = 'button';
       b.innerHTML = ICON.diamond;
@@ -169,35 +164,6 @@ export function mountChat(root: HTMLElement): void {
       });
       chips.append(b);
     }
-  }
-
-  /** Command rows sit under the suggestions — overlay only, so /chat stays plain. */
-  function renderCommands(): void {
-    if (isPage) return;
-    const wrap = el('div', 'chat-commands');
-    wrap.id = 'chat-commands-list';
-    wrap.append(el('p', 'chat-commands-label', 'Commands'));
-    for (const c of COMMANDS) {
-      const row = el(c.ask ? 'button' : 'a', 'chat-command');
-      if (c.ask) {
-        (row as HTMLButtonElement).type = 'button';
-        row.addEventListener('click', () => {
-          input.value = c.ask as string;
-          composer.requestSubmit();
-        });
-      } else {
-        const a = row as HTMLAnchorElement;
-        a.href = c.href as string;
-        if (!c.href!.startsWith('/')) {
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-        }
-      }
-      row.append(el('span', null, c.label));
-      row.insertAdjacentHTML('beforeend', ICON.back.replace('<svg', '<svg style="transform:rotate(180deg)"'));
-      wrap.append(row);
-    }
-    empty.append(wrap);
   }
 
   function typeInto(node: HTMLElement, text: string): void {
@@ -235,7 +201,7 @@ export function mountChat(root: HTMLElement): void {
     scroll();
   }
 
-  /** Follow-up questions sit under the answer they came from, as in the reference. */
+  /** Follow-up questions sit under the answer they came from. */
   function addFollowUps(answer: Answer): void {
     if (!answer.followUps.length) return;
     const wrap = el('div', 'chat-followups');
@@ -493,7 +459,6 @@ export function mountChat(root: HTMLElement): void {
     }
   }
 
-  scrim.addEventListener('click', () => setOpen(false));
   launcher.addEventListener('click', () => setOpen(shell.dataset.open !== 'true'));
 
   root.addEventListener('keydown', (e) => {
@@ -520,19 +485,16 @@ export function mountChat(root: HTMLElement): void {
   });
 
   renderChips();
-  renderCommands();
   renderState();
   shell.dataset.open = isPage ? 'true' : 'false';
+
   if (isPage) {
-    foot.append(composer, note);
     document.title = 'Chat · Ujwal Ramesh Karajgikar';
     window.setTimeout(() => input.focus({ preventScroll: true }), 40);
-  } else {
+  } else if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
     // One gentle hint that the launcher is there, then never again.
-    if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
-      window.setTimeout(() => {
-        if (shell.dataset.open === 'false') launcher.classList.add('is-idle');
-      }, 6000);
-    }
+    window.setTimeout(() => {
+      if (shell.dataset.open === 'false') launcher.classList.add('is-idle');
+    }, 6000);
   }
 }
