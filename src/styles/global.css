@@ -22,7 +22,7 @@ img{max-width:100%;height:auto}
 
 /* ---- header ---- */
 .site-nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(0.5rem);-webkit-backdrop-filter:blur(0.5rem);border-bottom:0.0625rem solid var(--ln)}
-.site-nav .in{position:relative;max-width:var(--wrap);margin:0 auto;padding:0.875rem var(--pad);display:flex;align-items:center;gap:1.25rem;min-height:var(--nav-h)}
+.site-nav .in{position:relative;max-width:var(--wrap);margin:0 auto;padding:0.875rem var(--pad);display:flex;align-items:center;gap:1.25rem}
 .nav-toggle{display:none;margin-left:auto;align-items:center;justify-content:center;width:2.375rem;height:2.375rem;border:0;background:transparent;color:var(--tx);cursor:pointer}
 .nav-toggle .ico-close{display:none}
 .nav-toggle[aria-expanded=true] .ico-open{display:none}
@@ -316,7 +316,7 @@ blockquote span{display:block;font-size:0.8125rem;color:var(--mu);margin-top:0.3
   .btn,.co .bt,.work-card,.site-nav nav a,.site-footer a{transition:none}
 }
 /* =====================================================================
-   CHAT — static agent. Rem-based, accent inherited from --pu so the
+   CHAT ï¿½ static agent. Rem-based, accent inherited from --pu so the
    launcher adopts the case-study colour on Horizon / Adapter.
    ===================================================================== */
 .chat{position:relative}
@@ -324,9 +324,19 @@ blockquote span{display:block;font-size:0.8125rem;color:var(--mu);margin-top:0.3
   position:fixed;right:1rem;bottom:1rem;z-index:24;
   display:grid;place-items:center;width:2.5rem;height:2.5rem;
   border:.0625rem solid var(--ln);border-radius:.125rem;background:#fff;color:var(--pu);
-  cursor:pointer;transition:border-color .15s,color .15s
+  cursor:pointer;
+  transition:border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease
 }
-.chat-launcher:hover{border-color:var(--pu)}
+.chat-launcher:hover{border-color:var(--pu);box-shadow:0 .25rem .75rem rgba(27,27,31,.08)}
+.chat-launcher:active{transform:scale(.94)}
+/* diamond morphs into the close mark */
+.chat-launcher .ico-mark,.chat-launcher .ico-x{grid-area:1/1;transition:opacity .18s ease,transform .22s cubic-bezier(.2,.8,.25,1)}
+.chat-launcher .ico-x{opacity:0;transform:rotate(-45deg) scale(.6)}
+.chat-launcher[aria-expanded="true"] .ico-mark{opacity:0;transform:rotate(90deg) scale(.6)}
+.chat-launcher[aria-expanded="true"] .ico-x{opacity:1;transform:none}
+/* one-shot attention hint, removed on first interaction */
+.chat-launcher.is-idle{animation:chatIdle 2.4s ease-in-out 2}
+@keyframes chatIdle{0%,100%{transform:none;box-shadow:none}50%{transform:translateY(-.1875rem);box-shadow:0 .375rem 1rem rgba(27,27,31,.12)}}
 /* case-study pages carry a full-width Contents bar; sit above it */
 body:has(.fab) .chat-launcher{bottom:3.5rem}
 @media(min-width:56.3125rem){.chat-launcher{right:max(1rem,calc(50% - var(--wrap)/2 + var(--pad)) - 1rem)}}
@@ -338,12 +348,32 @@ body:has(.fab) .chat-launcher{bottom:3.5rem}
 }
 .chat--launcher .chat-panel{
   position:fixed;z-index:26;right:1rem;bottom:1rem;
-  width:min(24rem,calc(100vw - 2rem));height:min(32rem,calc(100vh - var(--nav-h) - 4rem))
+  width:min(24rem,calc(100vw - 2rem));
+  /* sizes to content, capped by the space actually available above the header */
+  height:auto;
+  max-height:calc(100vh - var(--nav-h) - 2rem);
+  max-height:calc(100dvh - var(--nav-h) - 2rem);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateY(.625rem) scale(.97);transform-origin:100% 100%;
+  transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.25,1),visibility 0s linear .24s
 }
-body:has(.fab) .chat--launcher .chat-panel{bottom:3.5rem;height:min(32rem,calc(100vh - var(--nav-h) - 6rem))}
+.chat--launcher[data-open="true"] .chat-panel{
+  opacity:1;visibility:visible;pointer-events:auto;transform:none;
+  transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.25,1)
+}
+.chat--launcher .chat-log{min-height:9rem}
+body:has(.fab) .chat--launcher .chat-panel{
+  bottom:3.5rem;
+  max-height:calc(100vh - var(--nav-h) - 5.5rem);
+  max-height:calc(100dvh - var(--nav-h) - 5.5rem)
+}
 @media(min-width:56.3125rem){.chat--launcher .chat-panel{right:max(1rem,calc(50% - var(--wrap)/2 + var(--pad)) - 1rem)}}
-.chat--page{height:min(42rem,calc(100vh - var(--nav-h) - 4rem))}
+/* the page column is exactly the viewport minus the header, so the panel takes
+   the remaining space instead of a magic number measured from the top */
+.chat-page{min-height:calc(100vh - var(--nav-h));min-height:calc(100dvh - var(--nav-h));display:flex;flex-direction:column}
+.chat--page{flex:1;min-height:0;margin-top:1rem}
 .chat--page .chat-panel{height:100%}
+.chat--page .chat-log{min-height:14rem}
 
 /* head band */
 .chat-head{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;padding:.75rem .875rem;border-bottom:.0625rem solid var(--ln)}
@@ -421,11 +451,63 @@ body:has(.fab) .chat--launcher .chat-panel{bottom:3.5rem;height:min(32rem,calc(1
 .chat-stop{background:#fff;color:var(--tx);border-color:var(--ln)}
 .chat-noscript{display:inline-block;margin:0 0 1rem;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--pu)}
 @media(max-width:40rem){
-  .chat--launcher .chat-panel{width:calc(100vw - 1rem);right:.5rem;bottom:.5rem;left:.5rem;height:min(28rem,calc(100vh - var(--nav-h) - 5rem))}
-  body:has(.fab) .chat--launcher .chat-panel{bottom:3rem;height:min(26rem,calc(100vh - var(--nav-h) - 7rem))}
+  .chat--launcher .chat-panel{
+    width:calc(100vw - 1rem);right:.5rem;bottom:.5rem;left:.5rem;
+    transform-origin:50% 100%;
+    max-height:calc(100vh - var(--nav-h) - 1.5rem);
+    max-height:calc(100dvh - var(--nav-h) - 1.5rem)
+  }
+  body:has(.fab) .chat--launcher .chat-panel{
+    bottom:3rem;
+    max-height:calc(100vh - var(--nav-h) - 4.5rem);
+    max-height:calc(100dvh - var(--nav-h) - 4.5rem)
+  }
   .chat-launcher{right:.5rem;bottom:.5rem}
   body:has(.fab) .chat-launcher{bottom:3rem}
-  .chat--page{height:auto}
-  .chat--page .chat-panel{height:min(32rem,calc(100vh - var(--nav-h) - 12rem))}
+  .chat-page{min-height:calc(100vh - var(--nav-h));min-height:calc(100dvh - var(--nav-h))}
+  .chat--page .chat-log{min-height:10rem}
 }
 @media(prefers-reduced-motion:reduce){.chat-launcher,.chat-toggle,.chat-chip,.chat-mini,.chat-icon-btn{transition:none}}
+
+/* ---- motion: deliberate, short, and never in the way ---------------------- */
+.chat-log>.chat-msg.is-new{animation:chatRise .28s cubic-bezier(.2,.8,.25,1) both}
+.chat-msg--you.is-new{animation-name:chatRiseYou}
+@keyframes chatRise{from{opacity:0;transform:translateY(.5rem)}to{opacity:1;transform:none}}
+@keyframes chatRiseYou{from{opacity:0;transform:translateY(.25rem) scale(.98)}to{opacity:1;transform:none}}
+
+/* typing caret while text reveals */
+.chat-answer-prose.is-typing::after{
+  content:"";display:inline-block;width:.375rem;height:1em;margin-left:.125rem;
+  vertical-align:text-bottom;background:var(--pu);animation:chatCaret .9s steps(2) infinite
+}
+@keyframes chatCaret{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* thinking indicator */
+.chat-dots{display:flex;gap:.25rem;align-items:center;padding:.375rem 0}
+.chat-dots i{width:.375rem;height:.375rem;border-radius:50%;background:var(--mu);animation:chatDot 1.1s ease-in-out infinite}
+.chat-dots i:nth-child(2){animation-delay:.15s}
+.chat-dots i:nth-child(3){animation-delay:.3s}
+@keyframes chatDot{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-.1875rem)}}
+
+/* chips cascade in, so the row reads as one movement */
+.chat-chips .chat-chip{animation:chatChip .24s ease both}
+.chat-chips .chat-chip:nth-child(1){animation-delay:.02s}
+.chat-chips .chat-chip:nth-child(2){animation-delay:.06s}
+.chat-chips .chat-chip:nth-child(3){animation-delay:.1s}
+.chat-chips .chat-chip:nth-child(4){animation-delay:.14s}
+.chat-chips .chat-chip:nth-child(5){animation-delay:.18s}
+@keyframes chatChip{from{opacity:0;transform:translateY(.25rem)}to{opacity:1;transform:none}}
+
+/* press feedback + hover warmth on the small controls */
+.chat-mini:active,.chat-chip:active,.chat-toggle:active,.chat-icon-btn:active{transform:translateY(1px)}
+.chat-toggle,.chat-chip,.chat-mini,.chat-icon-btn{transition:color .15s ease,border-color .15s ease,transform .12s ease,background .15s ease}
+.chat-send,.chat-stop{transition:background .15s ease,color .15s ease,opacity .15s ease}
+.chat-send:disabled{opacity:.5;cursor:not-allowed}
+.chat-icon-btn:hover,.chat-chip:hover{color:var(--pu);border-color:var(--pu)}
+.chat-msg--you p{animation:none}
+
+@media(prefers-reduced-motion:reduce){
+  .chat *,.chat *::before,.chat *::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  .chat-launcher.is-idle{animation:none}
+  .chat-answer-prose.is-typing::after{animation:none}
+}

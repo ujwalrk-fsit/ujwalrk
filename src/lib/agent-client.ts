@@ -24,9 +24,13 @@ const SCOPES: { id: Scope | null; label: string }[] = [
 
 const DRAFT_INTENTS = ['draft an intro email', 'draft an email', 'write an email', 'intro email', 'email me'];
 
-const DIAMOND = `<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+const DIAMOND = `<svg class="ico-mark" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
   <path d="M8 0.6 15.4 8 8 15.4 0.6 8Z" fill="currentColor"/>
   <path d="M8 4.2 11.8 8 8 11.8 4.2 8Z" fill="#fff"/>
+</svg>`;
+
+const CLOSE_SVG = `<svg class="ico-x" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+  <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
 </svg>`;
 
 const CLOSE = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
@@ -57,12 +61,12 @@ export function mountChat(root: HTMLElement): void {
   const launcher = el('button', 'chat-launcher');
   launcher.type = 'button';
   launcher.setAttribute('aria-label', 'Open chat');
+  launcher.setAttribute('aria-controls', 'chat-panel');
   launcher.setAttribute('aria-expanded', 'false');
-  launcher.innerHTML = DIAMOND;
+  launcher.innerHTML = DIAMOND + CLOSE_SVG;
 
   const panel = el('section', 'chat-panel');
   panel.id = 'chat-panel';
-  panel.hidden = variant === 'launcher';
   panel.setAttribute('aria-label', 'Chat with Ujwal');
 
   const head = el('header', 'chat-head');
@@ -82,6 +86,8 @@ export function mountChat(root: HTMLElement): void {
   closeBtn.type = 'button';
   closeBtn.setAttribute('aria-label', 'Close chat');
   closeBtn.innerHTML = CLOSE;
+  // On /chat there is nothing to close — the panel is the page.
+  if (variant === 'page') closeBtn.hidden = true;
   headActions.append(clearBtn, closeBtn);
   head.append(headLabel, headActions);
 
@@ -134,13 +140,14 @@ export function mountChat(root: HTMLElement): void {
 
   /* --------------------------------------------------------------- render */
   function addUser(text: string): void {
-    const wrap = el('div', 'chat-msg chat-msg--you');
+    const wrap = el('div', 'chat-msg chat-msg--you is-new');
     wrap.append(el('p', null, text));
     log.append(wrap);
+    scroll();
   }
 
   function addAgent(answer: Answer, opts: { animate?: boolean } = {}): HTMLElement {
-    const wrap = el('article', 'chat-msg chat-msg--ai');
+    const wrap = el('article', `chat-msg chat-msg--ai${opts.animate ? ' is-new' : ''}`);
 
     const title = el('h2', 'chat-answer-title', answer.title);
     wrap.append(title);
@@ -213,17 +220,31 @@ export function mountChat(root: HTMLElement): void {
     return wrap;
   }
 
+  /** Three-dot indicator shown for a beat before the first characters arrive. */
+  function showTypingDots(): HTMLElement {
+    const wrap = el('article', 'chat-msg chat-msg--ai is-new');
+    wrap.append(el('div', 'chat-dots', '<i></i><i></i><i></i>'));
+    log.append(wrap);
+    stopBtn.hidden = false;
+    sendBtn.disabled = true;
+    scroll();
+    return wrap;
+  }
+
   function typeInto(node: HTMLElement, text: string): void {
     stopReveal();
     node.textContent = '';
+    node.classList.add('is-typing');
     let i = 0;
     stopBtn.hidden = false;
+    sendBtn.disabled = true;
     const tick = (): void => {
       node.textContent = text.slice(0, (i += 2));
       scroll();
       if (i >= text.length) {
         stopReveal();
         node.textContent = text;
+        node.classList.remove('is-typing');
       }
     };
     revealTimer = window.setInterval(tick, 12);
@@ -231,10 +252,15 @@ export function mountChat(root: HTMLElement): void {
 
   function stopReveal(): void {
     if (revealTimer != null) {
+      window.clearTimeout(revealTimer);
       window.clearInterval(revealTimer);
       revealTimer = null;
     }
+    // A cancelled reply leaves nothing behind: drop the thinking dots too.
+    log.querySelectorAll('.chat-dots').forEach((n) => n.parentElement?.remove());
+    log.querySelectorAll('.chat-answer-prose.is-typing').forEach((n) => n.classList.remove('is-typing'));
     stopBtn.hidden = true;
+    sendBtn.disabled = false;
   }
 
   function scroll(): void {
@@ -356,7 +382,20 @@ export function mountChat(root: HTMLElement): void {
     }
 
     turns.push({ q, a: answer });
-    addAgent(answer, { animate: true });
+
+    if (matchMedia('(prefers-reduced-motion:reduce)').matches) {
+      addAgent(answer);
+      return;
+    }
+
+    // Brief thinking indicator, then the answer types in — reads the way every
+    // chat agent does, and gives the Stop control something to interrupt.
+    const dots = showTypingDots();
+    revealTimer = window.setTimeout(() => {
+      if (revealTimer != null) window.clearTimeout(revealTimer);
+      dots.remove();
+      addAgent(answer, { animate: true });
+    }, 420);
   }
 
   /* -------------------------------------------------------------- controls */
@@ -415,47 +454,78 @@ export function mountChat(root: HTMLElement): void {
   });
 
   stopBtn.addEventListener('click', () => {
+    const last = turns[turns.length - 1];
     stopReveal();
-    const last = log.querySelector('.chat-msg--ai:last-child .chat-answer-prose');
-    if (last && turns.length) last.textContent = turns[turns.length - 1].a.prose;
+    if (!last) return;
+    const prose = log.querySelector('.chat-msg--ai:last-child .chat-answer-prose');
+    if (prose) {
+      // Stopped mid-reveal: show the full text rather than a truncated answer.
+      prose.textContent = last.a.prose;
+    } else {
+      // Stopped during the thinking phase, so no answer was rendered yet.
+      addAgent(last.a);
+    }
+    scroll();
   });
 
   clearBtn.addEventListener('click', clearTranscript);
 
   /* ----------------------------------------------------------- open / close */
   function setOpen(open: boolean): void {
-    panel.hidden = variant === 'launcher' && !open;
+    shell.dataset.open = String(open);
     launcher.setAttribute('aria-expanded', String(open));
+    launcher.setAttribute('aria-label', open ? 'Close chat' : 'Open chat');
+    launcher.classList.remove('is-idle');
     if (open) {
-      renderChips();
-      scroll();
-      window.setTimeout(() => input.focus(), 30);
+      // Focus is moved into the panel only once it is visible, otherwise the
+      // browser scrolls a still-hidden element into view.
+      window.setTimeout(() => {
+        renderChips();
+        scroll();
+        input.focus({ preventScroll: true });
+      }, 60);
+    } else {
+      stopReveal();
+      launcher.focus({ preventScroll: true });
     }
   }
 
-  launcher.addEventListener('click', () => setOpen(panel.hidden));
-  closeBtn.addEventListener('click', () => {
-    setOpen(false);
-    launcher.focus();
-  });
+  launcher.addEventListener('click', () => setOpen(shell.dataset.open !== 'true'));
+  closeBtn.addEventListener('click', () => setOpen(false));
 
   root.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && variant === 'launcher' && !panel.hidden) {
+    if (e.key === 'Escape' && variant === 'launcher' && shell.dataset.open === 'true') {
       setOpen(false);
-      launcher.focus();
+    }
+    if (e.key === 'Tab' && variant === 'launcher' && shell.dataset.open === 'true') {
+      // Keep focus inside the panel while it is open.
+      const focusables = panel.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], textarea, input, summary, [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
     }
   });
 
   if (variant === 'page') {
-    panel.hidden = false;
-    setOpen(true);
-    // A dedicated page is a real page: reflect the thread in the URL-less title.
     document.title = 'Chat · Ujwal Ramesh Karajgikar';
   }
 
   greet();
-  if (variant === 'launcher') {
-    // Never restore a transcript: a shared machine shouldn't leak one.
-    setOpen(false);
+  shell.dataset.open = variant === 'page' ? 'true' : 'false';
+
+  // One gentle hint that the launcher is there, then never again.
+  if (variant === 'launcher' && !matchMedia('(prefers-reduced-motion:reduce)').matches) {
+    window.setTimeout(() => {
+      if (shell.dataset.open === 'false') launcher.classList.add('is-idle');
+    }, 6000);
   }
 }

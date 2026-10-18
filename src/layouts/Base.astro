@@ -74,6 +74,19 @@ const links = [
   </footer>
   <script is:inline>
     (()=>{
+      /* Measure the real header height. The brand wraps to two or three lines on
+         narrow screens, so a declared value is always a guess — and every sticky
+         offset and panel height below depends on this being right. */
+      const head=document.querySelector('.site-nav'),root=document.documentElement;
+      const set=()=>{
+        const r=parseFloat(getComputedStyle(root).fontSize)||16;
+        root.style.setProperty('--nav-h',(head.getBoundingClientRect().height/r)+'rem');
+      };
+      set();
+      new ResizeObserver(set).observe(head);
+      document.fonts&&document.fonts.ready.then(set);
+    })();
+    (()=>{
       const btn=document.getElementById('navToggle'),panel=document.getElementById('siteLinks');
       const mq=matchMedia('(max-width:56.25rem)');
       const set=o=>{panel.classList.toggle('open',o);btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close menu':'Open menu')};

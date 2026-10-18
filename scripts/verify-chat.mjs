@@ -235,6 +235,75 @@ check(
   'z-index layering is wrong',
 );
 
+/* ------------------------------------------------------- 3b panel heights */
+console.log('\n3b. Panel heights are viewport-driven, not magic numbers');
+
+const capCount = (css.match(/max-height:calc\(100dvh - var\(--nav-h\)/g) ?? []).length;
+check('3b.dvh', capCount >= 2, `panels cap against 100dvh in ${capCount} places (survives mobile browser chrome)`, `only ${capCount} dvh cap(s); expected at least 2`);
+
+check(
+  '3b.autosize',
+  /\.chat--launcher \.chat-panel\{[^}]*height:auto/.test(css),
+  'launcher panel sizes to content instead of a fixed height',
+  'launcher panel still has a fixed height',
+);
+
+check(
+  '3b.nomagic',
+  !/height:min\([\d.]+rem,\s*calc\(100(?:d)?vh/.test(css),
+  'no remaining height:min(<magic>, 100vh) rules',
+  'a fixed magic-number height is still in the stylesheet',
+);
+
+check(
+  '3b.page',
+  /\.chat-page\{[^}]*display:flex[^}]*flex-direction:column/.test(css) && /\.chat--page\{flex:1;min-height:0/.test(css),
+  '/chat page column fills the viewport so the panel takes the remainder',
+  '/chat page does not flex to the remaining viewport height',
+);
+check(
+  '3b.pagewrap',
+  /class="page chat-page"/.test(read('dist/chat/index.html')),
+  '/chat renders with the chat-page wrapper class',
+  '/chat is missing the chat-page wrapper class',
+);
+
+check(
+  '3b.navh',
+  /new ResizeObserver\(set\)\.observe\(head\)/.test(read('src/layouts/Base.astro')) &&
+    /--nav-h/.test(read('src/layouts/Base.astro')),
+  'header height is measured into --nav-h, so panel caps stay correct when it wraps',
+  'header height is still a declared guess',
+);
+
+/* ------------------------------------------------------ 3c motion layer */
+console.log('\n3c. Motion is present and respects reduced-motion');
+
+// The minifier strips attribute quotes ([data-open=true]) and collapses ::after,
+// so these match against shipped CSS rather than the authored source.
+for (const [name, re] of [
+  ['panel open/close', /\[data-open=["']?true["']?\]\s*\.chat-panel\{[^}]*transform:none/],
+  ['icon morph', /\.chat-launcher\[aria-expanded=["']?true["']?\]\s*\.ico-mark\{[^}]*opacity:0/],
+  ['message entry', /@keyframes chatRise\{/],
+  ['typing caret', /\.chat-answer-prose\.is-typing:{1,2}after\{/],
+  ['thinking dots', /\.chat-dots i\{[^}]*animation:chatDot/],
+  ['chip cascade', /\.chat-chips \.chat-chip\{animation:chatChip/],
+]) {
+  check(`3c.${name.split(' ')[0]}`, re.test(css), `${name} animated`, `${name} missing in shipped CSS`);
+}
+check(
+  '3c.reduced',
+  /@media\(prefers-reduced-motion:reduce\)\{\s*\.chat \*/.test(css) || /\.chat-launcher\.is-idle\{animation:none\}/.test(css),
+  'reduced-motion disables every chat animation',
+  'chat animations are not disabled under prefers-reduced-motion',
+);
+check(
+  '3c.state',
+  /shell\.dataset\.open/.test(read('src/lib/agent-client.ts')),
+  'panel visibility is driven by data-open so transitions can run',
+  'panel still toggles via the hidden attribute, which blocks transitions',
+);
+
 /* ------------------------------------------------------------------ 4 */
 console.log('\n4. Still fully static — /chat prerendered, no server output');
 
