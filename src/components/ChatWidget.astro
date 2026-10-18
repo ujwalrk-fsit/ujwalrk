@@ -1,0 +1,27 @@
+---
+/**
+ * CHAT — a static agent grounded in this site's own pages.
+ * One component, two variants: a launcher on every page, or the whole /chat page.
+ */
+
+interface Props {
+  variant?: 'launcher' | 'page';
+}
+
+const { variant = 'launcher' } = Astro.props;
+---
+
+<div id="chat-root" data-variant={variant}></div>
+
+{variant === 'launcher' && (
+  <noscript>
+    <a class="chat-noscript" href="/chat">Open chat</a>
+  </noscript>
+)}
+
+<script>
+  import { mountChat } from '../lib/agent-client';
+
+  const root = document.getElementById('chat-root');
+  if (root) mountChat(root);
+</script>
