@@ -13,6 +13,17 @@ import { compose, leaks, search, type Answer } from './agent';
 
 const DRAFT_INTENTS = ['draft an intro email', 'draft an email', 'write an email', 'intro email', 'email me'];
 
+/** Quick commands for the overlay — plain navigation, no retrieval needed. */
+const COMMANDS: { label: string; href?: string; ask?: string }[] = [
+  { label: 'Read the Horizon case study', href: '/work/horizon' },
+  { label: 'Read the Adapter case study', href: '/work/adapter' },
+  { label: 'What results did he ship?', ask: 'What results did Horizon produce' },
+  { label: 'Experience and skills', ask: 'What tools and skills do you have' },
+  { label: 'How he works', ask: 'What is it like working with you' },
+  { label: 'Download resume', href: PROFILE.resume },
+  { label: 'Email Ujwal', href: `mailto:${PROFILE.email}` },
+];
+
 const ICON = {
   diamond: `<svg width="9" height="9" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0.6 15.4 8 8 15.4 0.6 8Z" fill="currentColor"/></svg>`,
   x: `<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
@@ -56,6 +67,8 @@ export function mountChat(root: HTMLElement): void {
   const panel = el('section', 'chat-panel');
   panel.id = 'chat-panel';
   panel.setAttribute('aria-label', 'Chat with Ujwal');
+
+  const scrim = el('div', 'chat-scrim');
 
   /* header — conversation state only */
   const head = el('header', 'chat-head');
@@ -112,7 +125,7 @@ export function mountChat(root: HTMLElement): void {
 
   panel.append(head, empty, log, foot);
   if (isPage) foot.append(composer, note);
-  shell.append(...(isPage ? [panel] : [launcher, panel]));
+  shell.append(...(isPage ? [panel] : [scrim, launcher, panel]));
   root.append(shell);
 
   /* ------------------------------------------------------------------ state */
@@ -156,6 +169,35 @@ export function mountChat(root: HTMLElement): void {
       });
       chips.append(b);
     }
+  }
+
+  /** Command rows sit under the suggestions — overlay only, so /chat stays plain. */
+  function renderCommands(): void {
+    if (isPage) return;
+    const wrap = el('div', 'chat-commands');
+    wrap.id = 'chat-commands-list';
+    wrap.append(el('p', 'chat-commands-label', 'Commands'));
+    for (const c of COMMANDS) {
+      const row = el(c.ask ? 'button' : 'a', 'chat-command');
+      if (c.ask) {
+        (row as HTMLButtonElement).type = 'button';
+        row.addEventListener('click', () => {
+          input.value = c.ask as string;
+          composer.requestSubmit();
+        });
+      } else {
+        const a = row as HTMLAnchorElement;
+        a.href = c.href as string;
+        if (!c.href!.startsWith('/')) {
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
+      }
+      row.append(el('span', null, c.label));
+      row.insertAdjacentHTML('beforeend', ICON.back.replace('<svg', '<svg style="transform:rotate(180deg)"'));
+      wrap.append(row);
+    }
+    empty.append(wrap);
   }
 
   function typeInto(node: HTMLElement, text: string): void {
@@ -451,6 +493,7 @@ export function mountChat(root: HTMLElement): void {
     }
   }
 
+  scrim.addEventListener('click', () => setOpen(false));
   launcher.addEventListener('click', () => setOpen(shell.dataset.open !== 'true'));
 
   root.addEventListener('keydown', (e) => {
@@ -477,6 +520,7 @@ export function mountChat(root: HTMLElement): void {
   });
 
   renderChips();
+  renderCommands();
   renderState();
   shell.dataset.open = isPage ? 'true' : 'false';
   if (isPage) {

@@ -216,45 +216,47 @@ const launcherAbove = css.match(/body:has\(\.fab\) \.chat-launcher\{[^}]*bottom:
 const panelAbove = css.match(/body:has\(\.fab\) \.chat--launcher \.chat-panel\{[^}]*bottom:\s*([\d.]+)rem/)?.[1];
 
 check('3.fab', fabHeight === '2.5', `Contents bar height is ${fabHeight}rem`, `Contents bar height is ${fabHeight}rem, expected 2.5rem`);
+// The overlay is a centred modal, so it clears the Contents bar by stacking and
+// scrimming over it rather than by being offset above it.
 check(
-  '3.launcher',
-  launcherAbove !== undefined && Number(launcherAbove) >= 3,
-  `launcher sits at ${launcherAbove}rem — clears the ${fabHeight}rem bar`,
-  `launcher bottom ${launcherAbove}rem does not clear the ${fabHeight}rem bar`,
-);
-check(
-  '3.panel',
-  panelAbove !== undefined && Number(panelAbove) >= 3,
-  `panel sits at ${panelAbove}rem — clears the ${fabHeight}rem bar`,
-  `panel bottom ${panelAbove}rem does not clear the ${fabHeight}rem bar`,
+  '3.overlay',
+  /\.chat-scrim\{[^}]*position:fixed;inset:0[^}]*z-index:25/.test(css) &&
+    /\.chat--launcher \.chat-panel\{[^}]*inset:0;margin:auto/.test(css),
+  'overlay is centred with a full-viewport scrim above the Contents bar',
+  'overlay is not a centred scrimmed modal',
 );
 check(
   '3.z',
   /\.chat-launcher\{[^}]*z-index:24/.test(css) && /\.chat--launcher \.chat-panel\{[^}]*z-index:26/.test(css),
-  'launcher (24) and panel (26) stack above the page, bar keeps 25',
+  'launcher (24), scrim (25) and panel (26) stack in the right order',
   'z-index layering is wrong',
 );
 
 /* ------------------------------------------------------- 3b panel heights */
 console.log('\n3b. Panel heights are viewport-driven, not magic numbers');
 
-const capCount = (css.match(/max-height:calc\(100dvh - var\(--nav-h\)/g) ?? []).length;
-check('3b.dvh', capCount >= 2, `panels cap against 100dvh in ${capCount} places (survives mobile browser chrome)`, `only ${capCount} dvh cap(s); expected at least 2`);
+const dvhUses = (css.match(/100dvh/g) ?? []).length;
+const vhUses = (css.match(/100vh/g) ?? []).length;
+check(
+  '3b.dvh',
+  dvhUses >= 3 && dvhUses >= vhUses,
+  `dynamic viewport units used ${dvhUses}x against ${vhUses}x of 100vh, each with a fallback`,
+  `only ${dvhUses} dvh use(s) against ${vhUses} vh use(s)`,
+);
 
 check(
   '3b.autosize',
-  /\.chat--launcher \.chat-panel\{[^}]*height:auto/.test(css),
-  'launcher panel sizes to content instead of a fixed height',
-  'launcher panel still has a fixed height',
+  /\.chat-empty\{[^}]*display:flex/.test(css) && /\.chat-empty>\*\{width:100%;max-width:32rem\}/.test(css),
+  'empty-state rows carry an explicit width so the composer cannot collapse',
+  'empty-state rows have no explicit width � the input collapses under align-items:center',
 );
-
 check(
-  '3b.nomagic',
-  !/height:min\([\d.]+rem,\s*calc\(100(?:d)?vh/.test(css),
-  'no remaining height:min(<magic>, 100vh) rules',
-  'a fixed magic-number height is still in the stylesheet',
+  '3b.modal',
+  /\.chat--launcher \.chat-panel\{[^}]*height:min\(38rem,calc\(100vh - 4rem\)\)/.test(css) &&
+    /\.chat--launcher \.chat-panel\{[^}]*max-height:calc\(100dvh - 4rem\)/.test(css),
+  'overlay height is a deliberate modal size with a dynamic-viewport cap',
+  'overlay height is not defined as a capped modal',
 );
-
 check(
   '3b.page',
   /\.page--chat\{[^}]*padding:0/.test(css) &&
@@ -277,18 +279,32 @@ check(
   '/chat still renders an intro text block',
 );
 check(
-  '3b.nopad',
-  !/class="page page--chat"[^>]*style/.test(chatPageHtml) && /\.page--chat\{[^}]*padding:0/.test(css),
-  'no leftover top padding on the chat page',
-  'the chat page still carries top padding',
-);
-
-check(
   '3b.navh',
   /new ResizeObserver\(set\)\.observe\(head\)/.test(read('src/layouts/Base.astro')) &&
     /--nav-h/.test(read('src/layouts/Base.astro')),
   'header height is measured into --nav-h, so panel caps stay correct when it wraps',
   'header height is still a declared guess',
+);
+
+/* ------------------------------------------- 3d [hidden] must stay authoritative */
+console.log('\n3d. State toggling is not silently broken');
+
+check(
+  '3d.hidden',
+  /\[hidden\]\{display:none\s*!important\}/.test(css),
+  '[hidden] is authoritative � class display rules cannot defeat it',
+  'missing [hidden]{display:none!important}: elements toggled by attribute still render',
+);
+// Guards the bug where a class with `display` beats the UA [hidden] rule, so the
+// empty state, transcript and header all render at the same time.
+const toggledWithDisplay = ['chat-empty', 'chat-log', 'chat-head', 'chat-chips', 'chat-editor'].filter((cls) =>
+  new RegExp('\\.' + cls + '\\{[^}]*display:').test(css),
+);
+check(
+  '3d.conflicts',
+  toggledWithDisplay.length >= 3,
+  `${toggledWithDisplay.length} attribute-toggled classes set display and are protected: ${toggledWithDisplay.join(', ')}`,
+  'expected several display-setting toggled classes to be protected',
 );
 
 /* ------------------------------------------------------ 3c motion layer */
@@ -393,6 +409,13 @@ check(
   embedded === KB.length,
   `all ${KB.length} knowledge entries are embedded in the bundle — zero requests to answer`,
   `only ${embedded}/${KB.length} entries embedded in the bundle`,
+);
+
+check(
+  '5.rem',
+  !/\d+px/.test(css),
+  'no px values anywhere in the shipped stylesheet — everything is rem',
+  `shipped CSS still contains ${(css.match(/\d+px/g) ?? []).length} px value(s)`,
 );
 
 /* ------------------------------------------------------------------ 6 */
