@@ -3,26 +3,7 @@ import Base from '../layouts/Base.astro';
 import ChatWidget from '../components/ChatWidget.astro';
 ---
 
-<Base
-  title="Chat · Ujwal Ramesh Karajgikar"
-  description="Ask questions about Ujwal's work as a Business Analyst — Horizon, Adapter, skills and experience. Answers are grounded in this site and cite their source."
-  current="chat"
->
-  <div class="page chat-page">
-    <div class="hm">
-      <h1>Chat</h1>
-      <p>
-        Ask about my work as a Business Analyst — the two case studies, the decisions
-        behind them, my skills and how I work. Every answer is grounded in this site and
-        shows you the section it came from.
-      </p>
-      <p>
-        This is a small static agent, not a language model: it matches your question
-        against answers compiled from these pages and shows you the source. It cannot
-        improvise, so if a question isn't covered it will say so rather than guess.
-        Nothing you type leaves your browser.
-      </p>
-    </div>
-    <ChatWidget variant="page" />
-  </div>
-</Base>
+<div class="page page--chat">
+  <h1 class="sr-only">Chat with Ujwal</h1>
+  <ChatWidget variant="page" />
+</div>

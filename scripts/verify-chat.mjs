@@ -257,15 +257,30 @@ check(
 
 check(
   '3b.page',
-  /\.chat-page\{[^}]*display:flex[^}]*flex-direction:column/.test(css) && /\.chat--page\{flex:1;min-height:0/.test(css),
-  '/chat page column fills the viewport so the panel takes the remainder',
-  '/chat page does not flex to the remaining viewport height',
+  /\.page--chat\{[^}]*padding:0/.test(css) &&
+    /\.page--chat\{[^}]*height:calc\(100dvh - var\(--nav-h\)\)/.test(css) &&
+    /\.chat--page\{height:100%/.test(css),
+  '/chat owns the full column height with zero top padding',
+  '/chat does not fill the viewport below the header',
 );
+const chatPageHtml = read('dist/chat/index.html');
 check(
   '3b.pagewrap',
-  /class="page chat-page"/.test(read('dist/chat/index.html')),
-  '/chat renders with the chat-page wrapper class',
-  '/chat is missing the chat-page wrapper class',
+  /class="page page--chat"/.test(chatPageHtml),
+  '/chat renders with the page--chat wrapper class',
+  '/chat is missing the page--chat wrapper class',
+);
+check(
+  '3b.nointro',
+  !/<div class="hm">/.test(chatPageHtml) && !/class="page page--chat">\s*<p/.test(chatPageHtml),
+  '/chat has no intro text block above the panel',
+  '/chat still renders an intro text block',
+);
+check(
+  '3b.nopad',
+  !/class="page page--chat"[^>]*style/.test(chatPageHtml) && /\.page--chat\{[^}]*padding:0/.test(css),
+  'no leftover top padding on the chat page',
+  'the chat page still carries top padding',
 );
 
 check(
@@ -389,8 +404,25 @@ const client = read('src/lib/agent-client.ts');
 // The transcript region is created at runtime, so assert on the source that builds it.
 check('6.log', /setAttribute\('role',\s*'log'\)/.test(client), "transcript is a role='log' region", "missing role='log'");
 check('6.live', /setAttribute\('aria-live',\s*'polite'\)/.test(client), "aria-live='polite' for streamed answers", "missing aria-live");
-check('6.exp', /aria-expanded/.test(chatHtml) || /aria-expanded/.test(client), 'launcher exposes aria-expanded', 'missing aria-expanded');
-check('6.press', /aria-pressed/.test(chatHtml) || /aria-pressed/.test(client), 'mode and scope toggles expose aria-pressed', 'missing aria-pressed');
+check('6.exp', /aria-expanded/.test(chatHtml) || /aria-expanded/.test(client), 'launcher and suggestion toggle expose aria-expanded', 'missing aria-expanded');
+check(
+  '6.press',
+  /setAttribute\('aria-expanded', String\(on\)\)/.test(client),
+  'the suggestions toggle reports its pressed state',
+  'suggestions toggle does not report aria-expanded',
+);
+
+// Minimality: the reference layout has no mode or scope controls, so they must
+// be gone rather than merely hidden.
+check(
+  '6.minimal',
+  !/chat-toggle/.test(client) && !/chat-row/.test(client) && !/chat-mode-note/.test(client) &&
+    !/chat-toggle/.test(css) && !/chat-controls/.test(css),
+  'mode and scope controls removed from the panel',
+  'mode or scope controls are still present',
+);
+check('6.empty', /chat-greeting/.test(client) && /chat-try/.test(client), 'empty state has a greeting and a prompt label', 'empty state is missing');
+check('6.note', /Static agent/.test(client), 'footer disclaimer discloses what the agent is', 'footer disclaimer missing');
 check('6.label', /aria-label/.test(client), 'icon-only controls carry aria-label', 'missing aria-label');
 check('6.esc', /e\.key === 'Escape'/.test(client), 'Escape closes the panel and returns focus', 'no Escape handling');
 check('6.enter', /e\.key === 'Enter'/.test(client), 'Enter submits, Shift+Enter newlines', 'no Enter handling');
