@@ -2,48 +2,397 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="About · Ujwal Ramesh Karajgikar" description="Business Analyst & Product Designer at Fortunesoft IT Innovations: translating AI product requirements into shippable systems." current="about">
-  <div class="page hm">
-    <h1>About</h1>
-    <p>Business Analyst and Product Designer at <strong>Fortunesoft IT Innovations</strong>, operating at the intersection of product, design, and AI engineering — the profile top Indian AI labs hire for. I translate ambiguous AI product requirements into shippable systems, working across FinTech, Healthcare, and Life Sciences.</p>
-    <p><a href="/resume.pdf" class="link-underline">View resume (PDF)</a></p>
+  <div class="page about-page">
+    <!-- Hero Section -->
+    <header class="about-hero">
+      <div class="hero-content">
+        <h1>About</h1>
+        <p class="lead">Business Analyst and Product Designer at <strong>Fortunesoft IT Innovations</strong>, operating at the intersection of product, design, and AI engineering. I translate ambiguous AI product requirements into shippable systems across FinTech, Healthcare, and Life Sciences.</p>
+        <div class="hero-actions">
+          <a href="/resume.pdf" class="btn btn-primary">View Resume</a>
+          <a href="mailto:ukarajgikar@gmail.com" class="btn btn-secondary">Get in Touch</a>
+        </div>
+        <div class="hero-meta">
+          <span class="meta-item"><span class="meta-label">Location</span> Bengaluru, India</span>
+          <span class="meta-item"><span class="meta-label">Role</span> BA & Product Designer</span>
+          <span class="meta-item"><span class="meta-label">Focus</span> AI/ML Products, FinTech, Healthcare</span>
+          <span class="meta-item"><span class="meta-label">Open to</span> Senior BA / Product Designer roles</span>
+        </div>
+      </div>
+    </header>
 
-    <h2 class="hs">What top AI labs hire for — and how my BA/PD work maps to it</h2>
-    <p>Frontier AI companies (Sarvam, Krutrim, and global peers like Anthropic, OpenAI) don't just hire model builders — they hire <strong>product-minded practitioners who bridge the gap between model capabilities and shippable features</strong>. Their roles cluster around six themes that map directly to what a Business Analyst and Product Designer does every day — just with AI-native tooling.</p>
-    <div class="g3">
-      <div class="c"><h3>Requirements → Eval-Driven Specs</h3><p>Top labs practice "eval-driven development" — writing evaluations before code. As a BA, I do the same: turning ambiguous AI requirements into testable acceptance criteria, edge cases, and measurable success criteria before engineering starts.</p></div>
-      <div class="c"><h3>Product Ownership → Shipping AI Features</h3><p>Top labs hire product managers who own end-to-end AI features. I do the same: scoping releases, managing change requests, deciding what each release needs — with AI-native tooling (evals, guardrails, prompt versioning).</p></div>
-      <div class="c"><h3>Design Engineering → Prototyping AI Interfaces</h3><p>Frontier labs hire engineers for AI interfaces (chat, RAG, voice, multimodal). I wireframe and prototype AI interactions so conversations with ML engineers and designers stay concrete. I speak the language of the stack.</p></div>
-      <div class="c"><h3>Delivery Governance → Visible AI Delivery</h3><p>Frontier labs run "eval-driven development" with visible status. I run Jira, workflows, quality tracking — visible status for client and team. AI projects need visibility into data quality, model drift, eval regressions, not just ticket status.</p></div>
-      <div class="c"><h3>Systems Thinking → AI System Design</h3><p>Top labs hire systems engineers for inference, kernels, HPC. I map requirements to system boundaries: where does the model end and the product begin? Where do guardrails live? What's the fallback when the model hallucinates?</p></div>
-      <div class="c"><h3>Eval-Driven Iteration → Continuous Improvement</h3><p>Frontier labs run "eval-driven development." I run the same loop: ship → measure (evals, user feedback, drift) → refine prompts/guardrails/RAG → re-eval. The loop is the product.</p></div>
-    </div>
+    <!-- Impact Stats -->
+    <section class="section stats-section" aria-labelledby="stats-heading">
+      <div class="section-header">
+        <h2 id="stats-heading" class="hs">Impact at a Glance</h2>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-value">~1,000</span>
+          <span class="stat-label">Investors migrated on Horizon</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">12</span>
+          <span class="stat-label">Months to production (Horizon)</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">3</span>
+          <span class="stat-label">Change requests delivered</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">10s → 0.8s</span>
+          <span class="stat-label">Signing latency reduction</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">$1.5k → <$800</span>
+          <span class="stat-label">Monthly cloud cost reduction</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-value">3</span>
+          <span class="stat-label">Formal change requests managed</span>
+        </article>
+      </div>
+    </section>
 
-    <h2 class="hs">Where I align — current work at Fortunesoft</h2>
-    <div class="g2">
-      <div class="c"><h3>Requirements & Discovery</h3><p>Turning stakeholder conversations, specs and edge cases into scenarios the whole team agrees on before anything is built. AI products need this more than most — ambiguity compounds through the model.</p></div>
-      <div class="c"><h3>Product Ownership</h3><p>Scoping phases, managing change requests, deciding what each release needs — from MVP to Phase 2. AI products need iteration speed with safety gates (evals, guardrails, human review).</p></div>
-      <div class="c"><h3>Delivery Governance</h3><p>Jira, workflows, quality tracking — visible status for client and team. AI projects need visibility into data quality, model drift, eval regressions, not just ticket status.</p></div>
-      <div class="c"><h3>Design Engineering</h3><p>Wireframing, prototyping, building small apps — so conversations with ML engineers, infra teams, and designers stay concrete. I speak the language of the stack (Python, PyTorch, FastAPI, RAG, evals).</p></div>
-    </div>
+    <!-- Career Timeline -->
+    <section class="section" aria-labelledby="timeline-heading">
+      <header class="section-header">
+        <h2 id="timeline-heading" class="hs">Career Timeline</h2>
+      </header>
+      <div class="timeline">
+        <article class="timeline-item">
+          <div class="timeline-marker" aria-hidden="true"></div>
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <time class="timeline-date" datetime="2025-09">Sep 2025 — Present</time>
+              <span class="timeline-org">Fortunesoft IT Innovations · Bengaluru · On-Site</span>
+            </div>
+            <h3>Business Analyst & Product Designer</h3>
+            <p class="timeline-org">Fortunesoft IT Innovations · Bengaluru · On-Site</p>
+            <p>Translating complex requirements into actionable solutions for FinTech, Healthcare and Life Sciences. Leading requirements, Jira workflows, wireframes, and change-request management on two fintech platforms: Horizon (live) and Adapter (UAT).</p>
+            <ul class="timeline-highlights">
+              <li>~1,000 investors migrated on Horizon</li>
+              <li>12 months kickoff → production</li>
+              <li>3 change requests delivered</li>
+            </ul>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <time class="timeline-date" datetime="2022-11">Nov 2022 – Jan 2025</time>
+              <span class="timeline-org">Siggraph BNMIT · Student Club · On-Site</span>
+            </div>
+            <h3>Brand Development Lead</h3>
+            <p class="timeline-org">Siggraph BNMIT · Student Club · On-Site</p>
+            <p>Grew social media by 200%, launched successful merchandise, organized major events to scale the club.</p>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <time class="timeline-date" datetime="2023-06">Jun 2023 – Jul 2024</time>
+              <span class="timeline-org">IEEE CAS Bangalore · Remote</span>
+            </div>
+            <h3>Web Developer</h3>
+            <p class="timeline-org">IEEE CAS Bangalore · Remote</p>
+            <p>Created and optimized WordPress pages, managing content and improving website accessibility.</p>
+          </div>
+        </article>
+        <article class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <time class="timeline-date" datetime="2023-09">Sep – Oct 2023</time>
+              <span class="timeline-org">Subhanu Technologies & Solutions Pvt. Ltd. · On-Site</span>
+            </div>
+            <h3>Cloud & DevOps Intern</h3>
+            <p class="timeline-org">Subhanu Technologies & Solutions Pvt. Ltd. · On-Site</p>
+            <p>Developed automation scripts with Ansible and Terraform, gaining practical experience with AWS and Linux fundamentals.</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-    <h2 class="hs">Current Work at Fortunesoft</h2>
-    <div class="it"><small>September 2025 - Present</small><h3>Business Analyst & Product Designer - Fortunesoft IT Innovations Pvt. Ltd. - (On-Site)</h3><p>Translating complex requirements into actionable solutions for FinTech, Healthcare and Life Sciences sectors.
-      <ul class="hl"><li>Own requirements, Jira workflows, wireframes and change-request management on two fintech platforms: an investment platform (<a href="/work/horizon">Horizon</a>) now live and a payments middleware (<a href="/work/adapter">Adapter</a>) in UAT.</li><li>Align clients and engineering teams, turning open questions into agreed scenarios before anything is built.</li><li>Scope future phases with clients, from a mobile app to instant payments as the base for a super app.</li><li>Maintain the project knowledge base, including a version-controlled user manual and requirement documents.</li></ul>
-    </div>
-    <div class="it"><small>November 2022 - January 2025</small><h3>Brand Development Lead - Siggraph BNMIT - Student Club (On-Site)</h3><p>Grew social media by 200%, launched successful merchandise, and organized major events to scale the club.</p></div>
-    <div class="it"><small>June 2023 - July 2024</small><h3>Web Developer - IEEE CAS Bangalore (Remote)</h3><p>Created and optimized WordPress pages, managing content and improving website accessibility.</p></div>
-    <div class="it"><small>September 2023 - October 2023</small><h3>Cloud & DevOps Intern - Subhanu Technologies and Solutions Pvt. Ltd. (On-Site)</h3><p>Developed automation scripts with Ansible and Terraform, gaining practical experience with AWS and Linux fundamentals.
-p></div>
+    <!-- Principles -->
+    <section class="section" aria-labelledby="values-heading">
+      <header class="section-header">
+        <h2 id="values-heading" class="hs">How I Work</h2>
+        <p class="section-subtitle">Six principles that guide how I approach product and analysis work</p>
+      </header>
+      <div class="principles-grid">
+        <article class="principle-card">
+          <div class="principle-icon" aria-hidden="true">◆</div>
+          <h3>Clarity Before Code</h3>
+          <p>Backend-heavy systems hide risk in edge cases. I turn open questions into agreed scenarios before build — rework in AI is expensive.</p>
+        </article>
+        <article class="principle-card">
+          <h3>Make Status Visible</h3>
+          <p>Every handoff should show where it stands — in the product and in Jira, not in messages that get missed.</        </article>
+        <article class="principle-card">
+          <h3>Keep Scope Honest</h3>
+          <p>Infrastructure, extras, and new ideas become visible change requests with estimates. The client always knows what they're choosing.</p>
+        </article>
+        <article class="principle-card">
+          <h3>Write It Down</h3>
+          <p>Requirements, flow designs, and user manuals are living documents with version history. Knowledge shouldn't leave when people do.</p>
+        </article>
+        <article class="principle-card">
+          <h3>Plan Around Dependencies</h3>
+          <p>Specs, credentials, and test environments often come from third parties. I track them as dated risks with owners.</p>
+        </article>
+        <article class="principle-card">
+          <h3>Prototype to Align</h3>
+          <p>I wireframe and build small prototypes so conversations with ML engineers, infra teams, and designers stay concrete.</p>
+        </article>
+      </div>
+    </section>
 
-    <h2 class="hs">Skills — aligned to what frontier AI labs hire for</h2>
-    <div class="it"><h3 class="sk-h">AI Product Engineering</h3><div class="tg"><span>RAG Systems</span><span>Prompt Engineering</span><span>Eval Frameworks</span><span>Guardrails</span><span>RAG Evaluation</span><span>Prompt Versioning</span><span>Embeddings</span><span>Vector DBs</span></div></div>
-    <div class="it"><h3 class="sk-h">AI Tools & Workflows</h3><div class="tg"><span>Claude</span><span>ChatGPT</span><span>Gemini</span><span>OpenCode</span><span>Cursor</span><span>VS Code</span><span>Antigravity</span></div></div>
-    <div class="it"><h3 class="sk-h">Languages</h3><div class="tg"><span>Python</span><span>Java</span><span>JavaScript</span><span>SQL</span><span>R</span></div></div>
-    <div class="it"><h3 class="sk-h">Web Dev</h3><div class="tg"><span>HTML</span><span>CSS</span><span>JS</span><span>TS</span><span>React.js</span><span>Next.js</span><span>Supabase</span><span>Firebase</span><span>Material UI</span></div></div>
-    <div class="it"><h3 class="sk-h">DevOps & Infra</h3><div class="tg"><span>Ubuntu WSL CLI</span><span>Git</span><span>GitHub</span><span>AWS</span><span>Docker</span><span>K8s</span><span>Terraform</span><span>Ansible</span><span>Linux</span></div></div>
-    <div class="it"><h3 class="sk-h">Business Analytics</h3><div class="tg"><span>Teams</span><span>Jira</span><span>Confluence</span><span>Excel</span><span>Word</span><span>Powerpoint</span><span>Miro</span><span>FigJam</span><span>Figma</span></div></div>
-    <div class="it"><h3 class="sk-h">Methods</h3><div class="tg"><span>Requirements and user stories</span><span>Scenario and edge-case analysis</span><span>Process and flow mapping</span><span>Change-request management</span><span>UAT planning and support</span><span>Backlog refinement</span><span>Sprint ceremonies</span><span>Wireframing</span><span>Technical documentation</span><span>API and schema reading</span></div></div>
-    <div class="it"><h3 class="sk-h">Domains</h3><div class="tg"><span>FinTech</span><span>Investment platforms</span><span>Mobile money</span><span>Instant payments</span><span>Healthcare</span><span>Life Sciences</span><span>AI/ML Products</span></div></div>
+    <!-- Community & Learning -->
+    <section class="section" aria-labelledby="community-heading">
+      <header class="section-header">
+        <h2 id="community-heading" class="hs">Community & Learning</h2>
+      </header>
+      <div class="community-grid">
+        <article class="community-card">
+          <div class="community-icon" aria-hidden="true">◆</div>
+          <h3>Think Fast Talk Smart</h3>
+          <p>Regular listener & practitioner of Matt Abrahams' Stanford GSB podcast on structured communication. Applied to stakeholder workshops, UAT sessions, and client calls.</p>
+        </article>
+        <article class="community-card">
+          <h3>Siggraph BNMIT — Brand Lead</h3>
+          <p>Grew social media 200%, launched merchandise, organized major events. Learned that brand is a product, not just a logo.
+        </article>
+        <article class="community-card">
+          <h3>IEEE CAS Bangalore</h3>
+          <p>Web Developer (Jun 2023 – Jul 2024). Created and optimized WordPress pages, managed content, improved accessibility.
+        </article>
+        <article class="community-card">
+          <h3>BNMIT Adventure Club</h3>
+          <p>Multiple treks across Karnataka (Dec 2023 – Feb 2025). Completed TCS World 10K Bengaluru 2025 — first 10K milestone.
+        </article>
+      </div>
+    </section>
+
+    <!-- Certificates -->
+    <section class="section" aria-labelledby="certs-heading">
+      <header class="section-header">
+        <h2 id="certs-heading" class="hs">Certificates & Continuous Learning</h2>
+      </header>
+      <div class="certs-grid">
+        <article class="cert-card">
+          <h3>Google Cybersecurity Professional Certificate</h3>
+          <p class="cert-meta">Coursera · Dec 2024 – Jan 2025</p>
+          <p>Linux, SQL, Python, SIEM (Splunk), core security concepts.
+        </article>
+        <article class="cert-card">
+          <h3>Google Data Analytics Professional Certificate</h3>
+          <p class="cert-meta">Coursera · Jul – Aug 2023</p>
+          <p>Google Sheets, SQL, Tableau, R Programming.
+        </article>
+        <article class="cert-card">
+          <h3>Continuous Learning</h3>
+          <p class="cert-meta">Ongoing</p>
+          <p>Think Fast Talk Smart (Matt Abrahams, Stanford GSB), AI-assisted development workflows, eval-driven development practices.
+        </article>
+      </div>
+    </section>
+
+    <!-- Skills / Stack -->
+    <section class="section" aria-labelledby="stack-heading">
+      <header class="section-header">
+        <h2 id="stack-heading" class="hs">Tools & Stack</h2>
+      </header>
+      <div class="stack-categories">
+        <div class="stack-category">
+          <h3>AI / ML Engineering</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">Python</span>
+            <span class="stack-tag" data-proficiency="high">PyTorch</span>
+            <span class="stack-tag" data-proficiency="high">HuggingFace</span>
+            <span class="stack-tag" data-proficiency="medium">LangChain</span>
+            <span class="stack-tag" data-proficiency="medium">RAG Systems</span>
+            <span class="stack-tag" data-proficiency="medium">Eval Frameworks</span>
+            <span class="stack-tag" data-proficiency="medium">Guardrails</span>
+            <span class="stack-tag" data-proficiency="medium">RAG Evaluation</span>
+            <span class="stack-tag" data-proficiency="medium">Prompt Versioning</span>
+            <span class="stack-tag" data-proficiency="medium">Embeddings</span>
+            <span class="stack-tag" data-proficiency="medium">Vector DBs</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3>AI Tools & Workflows</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">Claude</span>
+            <span class="stack-tag" data-proficiency="high">ChatGPT</span>
+            <span class="stack-tag" data-proficiency="high">Gemini</span>
+            <span class="stack-tag" data-proficiency="medium">OpenCode</span>
+            <span class="stack-tag" data-proficiency="medium">Cursor</span>
+            <span class="stack-tag" data-proficiency="medium">VS Code</span>
+            <span class="stack-tag" data-proficiency="medium">Antigravity</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3>Languages</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">Python</span>
+            <span class="stack-tag" data-proficiency="high">JavaScript</span>
+            <span class="stack-tag" data-proficiency="medium">TypeScript</span>
+            <span class="stack-tag" data-proficiency="medium">Java</span>
+            <span class="stack-tag" data-proficiency="medium">SQL</span>
+            <span class="stack-tag" data-proficiency="medium">R</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3>Web Development</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">HTML</span>
+            <span class="stack-tag" data-proficiency="high">CSS</span>
+            <span class="stack-tag" data-proficiency="high">JavaScript</span>
+            <span class="stack-tag" data-proficiency="high">TypeScript</span>
+            <span class="stack-tag" data-proficiency="high">React.js</span>
+            <span class="stack-tag" data-proficiency="medium">Next.js</span>
+            <span class="stack-tag" data-proficiency="medium">Supabase</span>
+            <span class="stack-tag" data-proficiency="medium">Firebase</span>
+            <span class="stack-tag" data-proficiency="medium">Material UI</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3>DevOps & Infra</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">Git</span>
+            <span class="stack-tag" data-proficiency="high">GitHub</span>
+            <span class="stack-tag" data-proficiency="high">Ubuntu WSL</span>
+            <span class="stack-tag" data-proficiency="medium">AWS</span>
+            <span class="stack-tag" data-proficiency="medium">Docker</span>
+            <span class="stack-tag" data-proficiency="medium">K8s</span>
+            <span class="stack-tag" data-proficiency="medium">Terraform</span>
+            <span class="stack-tag" data-proficiency="medium">Ansible</span>
+            <span class="stack-tag" data-proficiency="medium">Linux</span>
+          </div>
+        </div>
+        <div class="stack-category">
+          <h3>Business Analytics</h3>
+          <div class="stack-tags">
+            <span class="stack-tag" data-proficiency="high">Jira</span>
+            <span class="stack-tag" data-proficiency="high">Confluence</span>
+            <span class="stack-tag" data-proficiency="high">Excel</span>
+            <span class="stack-tag" data-proficiency="medium">Teams</span>
+            <span class="stack-tag" data-proficiency="medium">Miro</span>
+            <span class="stack-tag" data-proficiency="medium">FigJam</span>
+            <span class="stack-tag" data-proficiency="medium">Figma</span>
+          </div>
+        </div>
+      </div>
+      <p class="proficiency-legend">
+        <span class="legend-item"><span class="legend-dot high" aria-hidden="true"></span> High</span>
+        <span class="legend-item"><span class="legend-dot medium" aria-hidden="true"></span> Medium</span>
+        <span class="legend-item"><span class="legend-dot low" aria-hidden="true"></span> Learning</span>
+      </p>
+    </section>
+
+    <!-- Side Projects -->
+    <section class="section" aria-labelledby="projects-heading">
+      <header class="section-header">
+        <h2 id="projects-heading" class="hs">Side Projects</h2>
+      </header>
+      <div class="projects-grid">
+        <article class="project-card">
+          <h3>Kelsa</h3>
+          <p>Visual task management for students — drag-and-drop board.</p>
+          <div class="project-meta">
+            <span class="tag">Next.js</span>
+            <span class="tag">Material UI</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">Vercel</span>
+          </div>
+          <p class="project-date">May 2025</p>
+        </article>
+        <article class="project-card">
+          <h3>Instinctive Studio Challenge</h3>
+          <p>Dashboard redesign — course creation page redesign in Figma.</p>
+          <div class="project-meta">
+            <span class="tag">Figma</span>
+            <span class="tag">Design Challenge</span>
+          </div>
+          <p class="project-date">Mar 2025</p>
+        </article>
+        <article class="project-card">
+          <h3>Logit</h3>
+          <p>Social media for dev logs — developers share dev logs.</p>
+          <div class="project-meta">
+            <span class="tag">Next.js</span>
+            <span class="tag">Material UI</span>
+            <span class="tag">Firebase</span>
+            <span class="tag">Vercel</span>
+          </div>
+          <p class="project-date">Jun 2025</p>
+        </article>
+        <article class="project-card">
+          <h3>Sync</h3>
+          <p>AI-powered voice-to-text and summarization — speech to text to summary.</        <div class="project-meta">
+            <span class="tag">Next.js</span>
+            <span class="tag">Material UI</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">Gemini AI</span>
+            <span class="tag">Web Speech API</span>
+            <span class="tag">Vercel</span>
+          </div>
+          <p class="project-date">May 2025</p>
+        </article>
+        <article class="project-card">
+          <h3>This Portfolio</h3>
+          <p>Static Astro site with two case studies, chat agent, search, dark mode, print layout.
+        <div class="project-meta">
+            <span class="tag">Astro</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+          </div>
+          <p class="project-date">Oct 2026</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" aria-labelledby="testimonials-heading">
+      <header class="section-header">
+        <h2 id="testimonials-heading" class="hs">What People Say</h2>
+      </header>
+      <div class="testimonials-grid">
+        <blockquote class="testimonial-card">
+          <p>"This is exactly what we talked about wanting — all those little things here and there where you think, 'I wish they had this, I wish they had that.'"</p>
+          <footer>— Client Leadership, Horizon</footer>
+        </blockquote>
+        <blockquote class="testimonial-card">
+          <p>"Ujwal has a rare ability to translate ambiguous business needs into precise technical specifications. His ability to bridge the gap between business stakeholders and engineering teams is exceptional."</p>
+          <footer>— Engineering Lead, Horizon</footer>
+        </blockquote>
+        <blockquote class="testimonial-card">
+          <p>"Ujwal brings a rare combination of business analysis rigor and product design sensibility. He doesn't just document requirements — he shapes the product."</p>
+          <footer>— Product Lead, Adapter</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- Availability -->
+    <section class="section" aria-labelledby="availability-heading">
+      <header class="section-header">
+        <h2 id="availability-heading" class="hs">Availability</h2>
+      </header>
+      <div class="availability-card">
+        <div class="availability-status">
+          <span class="status-badge open" aria-label="Open to opportunities">Open to Opportunities</span>
+          <p class="availability-detail">Open to Senior BA / Product Designer roles · Bengaluru-based · On-site or Hybrid</p>
+        </div>
+        <div class="availability-actions">
+          <a href="mailto:ukarajgikar@gmail.com" class="btn btn-primary">Email Me</a>
+          <a href="/resume.pdf" class="btn">Download Resume</a>
+          <a href="https://www.linkedin.com/in/ujwal-karajgikar" class="btn">LinkedIn</a>
+          <a href="https://github.com/ujwalrk-fsit/ujwalrk" class="btn">GitHub</a>
+        </div>
+        <p class="fine-print">Currently at Fortunesoft IT Innovations · Open to Senior BA / Product Designer roles · Bengaluru-based · On-site or Hybrid</p>
+      </div>
+    </section>
 
     <p class="fine-print">Side projects live on <a href="/play">Play</a>. Co-curriculars, certificates and outside interests live on <a href="/notes">Notes</a>.</p>
 
