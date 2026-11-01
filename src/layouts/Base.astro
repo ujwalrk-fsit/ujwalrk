@@ -5,7 +5,7 @@ import ChatWidget from '../components/ChatWidget.astro';
 interface Props {
   title: string;
   description?: string;
-  current?: 'home' | 'work' | 'about' | 'play' | 'notes' | 'chat';
+  current?: 'home' | 'work' | 'about' | 'play' | 'notes' | 'chat' | 'agent';
   accent?: 'purple' | 'orange';
 }
 const { title, description = 'Business Analyst x Design Engineer — portfolio bridging business and engineering.', current, accent } = Astro.props;
@@ -16,6 +16,7 @@ const links = [
   { href: '/play', label: 'Play', key: 'play' },
   { href: '/notes', label: 'Notes', key: 'notes' },
   { href: '/chat', label: 'Chat', key: 'chat' },
+  { href: '/agent', label: 'Agent', key: 'agent' },
 ];
 ---
 <!DOCTYPE html>
